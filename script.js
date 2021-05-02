@@ -139,7 +139,7 @@ function renderStats() {
 		const burnedStandardsNumber = (
 			standardsConsumed() - standardsInSystem()
 		).toFixed(2)
-		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned off`
+		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned`
 	}
 }
 
@@ -188,7 +188,7 @@ function renderDrink(drink) {
 	//Render the time the drink was finished, or remove that element if the drink has not been finished
 	finishedDatetime.innerText = drink.completeDatetime
 		? `Drunk by ${timeConverter(drink.completeDatetime)}`
-		: finishedDatetime.remove()
+		: ""
 	drinkSubtitle.innerText = setDrinkSubtitle(drink, drinkContainer)
 	//Render the element to the DOM
 	container.appendChild(templateClone)
