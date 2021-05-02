@@ -125,7 +125,6 @@ function renderStats() {
 
 	//Grab the DOM elements needed
 	const statsCard = document.querySelector("#stats-card")
-
 	const activeStandards = statsCard.querySelector("#active-standards")
 	const consumedStandards = statsCard.querySelector("#consumed-standards")
 	const burnedStandards = statsCard.querySelector("#burned-standards")
@@ -136,11 +135,11 @@ function renderStats() {
 		burnedStandards.remove()
 	} else {
 		activeStandards.innerText = `${standardsInSystem()}x standards in your system`
-		consumedStandards.innerText = `${standardsConsumed()}x standards consumed this session`
+		consumedStandards.innerText = `${standardsConsumed()}x standards consumed`
 		const burnedStandardsNumber = (
 			standardsConsumed() - standardsInSystem()
 		).toFixed(2)
-		burnedStandards.innerText = `${burnedStandardsNumber}x standards already burned off`
+		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned off`
 	}
 }
 

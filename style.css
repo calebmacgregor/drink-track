@@ -250,7 +250,7 @@ button {
 	transition: ease 150ms;
 }
 
-#small-delete-drink:hover {
+#small-delete-drink:focus {
 	width: 3rem;
 	border-radius: 5px;
 }
