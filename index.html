@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="script.js" defer></script>
+	</head>
+	<body>
+		<div id="stats-card" class="stats-card card">
+			<h1 id="active-standards"></h1>
+			<h3 id="consumed-standards"></h3>
+			<h3 id="burned-standards"></h3>
+		</div>
+		<div class="input-card card" id="input-card">
+			<div class="title" id="title">
+				<h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
+			</div>
+			<div class="standards-estimator" id="standards-estimator">
+				<h3 id="standards-estimator-standards">
+					Enter the volume and percentage
+				</h3>
+				<p id="standards-estimator-burnoff"></p>
+			</div>
+			<form class="form" id="form">
+				<div class="inputs">
+					<label for="volume"></label>
+					<input
+						type="number"
+						class="volume-input"
+						id="volume-input"
+						name="volume"
+						placeholder="Volume"
+					/>
+
+					<label for="percentage"></label>
+					<input
+						type="float"
+						class="percentage-input"
+						id="percentage-input"
+						name="percentage"
+						placeholder="Percentage"
+					/>
+				</div>
+
+				<button id="submit-drink">Submit</button>
+			</form>
+		</div>
+
+		<div class="container" id="container">
+			<ul id="object-list"></ul>
+		</div>
+
+		<template id="drink-template">
+			<div class="drink-card card" id="drink-card">
+				<button id="small-delete-drink" class="delete-drink">X</button>
+				<h3 id="standards" class="standards"></h3>
+				<div class="dates">
+					<p id="started-datetime"></p>
+					<p id="finished-datetime"></p>
+					<p id="drink-subtitle"></p>
+				</div>
+				<div class="buttons">
+					<button id="mark-drunk">Drink</button>
+					<button id="delete-drink" class="delete-drink">Delete</button>
+				</div>
+				<progress id="progress" value="=0"></progress>
+			</div>
+		</template>
+
+		<template id="stats-template"> </template>
+	</body>
+</html>
