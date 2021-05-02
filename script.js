@@ -63,7 +63,6 @@ form.addEventListener("submit", (e) => {
 	percentageInput.value = ""
 	standardsEstimatorStandards.innerText = "Enter the volume and percentage"
 	standardsEstimatorBurnoff.innerText = ""
-	volumeInput.focus()
 
 	updateData()
 	renderData()
