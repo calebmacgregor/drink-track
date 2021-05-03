@@ -115,8 +115,10 @@ function renderEstimator(volume, percentage) {
 	const minutesToBurn = timeToBurn(standards).minutes
 
 	standardsEstimatorStandards.innerText = `${standards}x standards`
-
-	if (hoursToBurn > 0 && minutesToBurn == 0) {
+	if (standards == 0) {
+		standardsEstimatorBurnoff.innerText = `That's barely alcoholic`
+	}
+	else if (hoursToBurn > 0 && minutesToBurn == 0) {
 		standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours flat`
 	} else if (hoursToBurn == 0 && minutesToBurn > 0) {
 		standardsEstimatorBurnoff.innerText = `Burned off in ${minutesToBurn} minutes`
@@ -209,6 +211,7 @@ function renderDrink(drink) {
 //Calculation functions
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
+	if (volume == '.' || percentage == '.') return 0
 	//Return the number of standards rounded to 1 decimal place
 	return ((volume / 1000) * percentage * 0.789).toFixed(1)
 }
@@ -328,12 +331,9 @@ function updateData() {
 
 //Simple function to run other functions that render the DOM
 function renderData() {
-	setTimeout(() => {
 		container.innerHTML = ""
 		drinks.forEach(renderDrink)
 		renderStats()
-	}, 100);
-
 }
 
 //Return the correct string for the drinkSubtitle
