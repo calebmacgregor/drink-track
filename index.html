@@ -7,8 +7,11 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable = no"
 		/>
+		<meta name="theme-color" content="#000000"/>
 		<title>Document</title>
 		<link rel="stylesheet" href="style.css" />
+		<link rel="manifest" href="manifest.json">
+		<link rel="apple-touch-icon" href="icons/apple-icon-180.png">
 		<script src="script.js" defer></script>
 	</head>
 	<body>
@@ -75,6 +78,10 @@
 			</div>
 		</template>
 
-		<template id="stats-template"> </template>
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.register('service-worker.js')
+			}
+		</script>
 	</body>
 </html>

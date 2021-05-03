@@ -17,6 +17,7 @@ const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 let drinks = loadDrinks()
 drinks.forEach(renderDrink)
 renderStats()
+console.log(navigator.userAgent)
 
 //Create the drink class
 class Drink {
