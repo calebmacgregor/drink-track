@@ -77,17 +77,6 @@ form.addEventListener("submit", (e) => {
 	renderData()
 })
 
-//Add a new drink if the 'same again' button is pressed
-document.addEventListener("click", (e) => {
-	if (!e.target.matches("#same-again-submit")) return
-	e.preventDefault()
-	const drink = new Drink(sameAgain().volume, sameAgain().percentage)
-
-	drinks.unshift(drink)
-	updateData()
-	renderData()
-})
-
 //Delete drinks when the delete button is clicked
 document.addEventListener("click", (e) => {
 	//Short circuit if the element clicked is not the button with the ID of delete-drink
@@ -392,26 +381,3 @@ function standardsConsumed() {
 //TODO
 //Build a queuing system to burn through drinks in order of consumption
 //Build out compact view of existing drinks
-
-//Render a card that allows you to quickly have the same drink as last time
-function sameAgain() {
-	//Update drink data
-	loadDrinks()
-	//Grab the latest drink (First in the array as items are shifted in)
-	const drink = drinks[0]
-
-	//Grab elements
-	const sameAgainVolume = document.querySelector("#same-again-volume")
-	const sameAgainPercentage = document.querySelector("#same-again-percentage")
-	const sameAgainStandards = document.querySelector("#same-again-standards")
-	const sameAgainSubmit = document.querySelector("#same-again-submit")
-
-	//Set the text of all elements
-	sameAgainVolume.innerText = `${drink.volume}mls`
-	sameAgainPercentage.innerText = `${drink.percentage}%`
-	sameAgainStandards.innerText = `${drink.standards} standards`
-
-	return { volume: drink.volume, percentage: drink.percentage }
-}
-
-sameAgain()
