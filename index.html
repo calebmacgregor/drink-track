@@ -7,22 +7,27 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable = no, viewport-fit=cover"
 		/>
-		<meta name="theme-color" content="#000000"/>
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="theme-color" content="#000000" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta
+			name="apple-mobile-web-app-status-bar-style"
+			content="black-translucent"
+		/>
 		<link rel="stylesheet" href="style.css" />
-		<link rel="manifest" href="manifest.json">
-		
-		<link rel="apple-touch-icon" href="icons/apple-icon-180.png">
+		<link rel="manifest" href="manifest.json" />
+
+		<link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
 		<script src="script.js" defer></script>
 		<title>Drink Track</title>
 	</head>
+
 	<body>
 		<div id="stats-card" class="stats-card card">
 			<h1 id="active-standards"></h1>
 			<h4 id="consumed-standards"></h4>
 			<h4 id="burned-standards"></h4>
 		</div>
+
 		<div class="input-card card" id="input-card">
 			<div class="title" id="title">
 				<h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
@@ -60,6 +65,18 @@
 			</form>
 		</div>
 
+		<div class="same-again-card card" id="same-again-card">
+			<h3 id="same-again-title">Quick add</h3>
+			<div class="same-again-content" id="same-again-content">
+				<h4 class="same-again-volume" id="same-again-volume"></h4>
+				<h4 class="same-again-percentage" id="same-again-percentage"></h4>
+				<h4 class="same-again-standards" id="same-again-standards"></h4>
+			</div>
+			<button class="same-again-submit" id="same-again-submit">
+				Same again
+			</button>
+		</div>
+
 		<div class="container" id="container">
 			<ul id="object-list"></ul>
 		</div>
@@ -82,8 +99,8 @@
 		</template>
 
 		<script>
-			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('service-worker.js')
+			if ("serviceWorker" in navigator) {
+				navigator.serviceWorker.register("service-worker.js")
 			}
 		</script>
 	</body>

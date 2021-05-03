@@ -22,6 +22,10 @@ h3 {
 	font-weight: bold;
 }
 
+h4 {
+	font-size: 16px;
+}
+
 p {
 	font-size: 11px;
 	font-weight: bold;
@@ -78,6 +82,43 @@ body {
 	margin-bottom: 1rem;
 	padding: 2rem;
 	height: 310px;
+}
+
+/*  */
+/*  */
+/* Same again card styling */
+/*  */
+/*  */
+
+.same-again-card {
+	position: relative;
+	display: flex;
+	height: 150px;
+	flex-direction: row;
+	justify-content: space-evenly;
+	margin: 1rem;
+	align-items: center;
+}
+
+#same-again-title {
+	position: absolute;
+	top: 10%;
+}
+
+.same-again-content {
+	position: absolute;
+	left: 10%;
+	bottom: 5%;
+	display: flex;
+	height: 60%;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.same-again-submit {
+	position: absolute;
+	right: 5%;
+	bottom: 25%;
 }
 
 /*  */

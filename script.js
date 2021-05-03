@@ -25,7 +25,7 @@ console.log(navigator.userAgent)
 
 setInterval(() => {
 	renderData()
-}, 20000);
+}, 20000)
 
 //Create the drink class
 class Drink {
@@ -77,6 +77,17 @@ form.addEventListener("submit", (e) => {
 	renderData()
 })
 
+//Add a new drink if the 'same again' button is pressed
+document.addEventListener("click", (e) => {
+	if (!e.target.matches("#same-again-submit")) return
+	e.preventDefault()
+	const drink = new Drink(sameAgain().volume, sameAgain().percentage)
+
+	drinks.unshift(drink)
+	updateData()
+	renderData()
+})
+
 //Delete drinks when the delete button is clicked
 document.addEventListener("click", (e) => {
 	//Short circuit if the element clicked is not the button with the ID of delete-drink
@@ -117,8 +128,7 @@ function renderEstimator(volume, percentage) {
 	standardsEstimatorStandards.innerText = `${standards}x standards`
 	if (standards == 0) {
 		standardsEstimatorBurnoff.innerText = `That's barely alcoholic`
-	}
-	else if (hoursToBurn > 0 && minutesToBurn == 0) {
+	} else if (hoursToBurn > 0 && minutesToBurn == 0) {
 		standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours flat`
 	} else if (hoursToBurn == 0 && minutesToBurn > 0) {
 		standardsEstimatorBurnoff.innerText = `Burned off in ${minutesToBurn} minutes`
@@ -139,7 +149,7 @@ function renderStats() {
 	const consumedStandards = statsCard.querySelector("#consumed-standards")
 	const burnedStandards = statsCard.querySelector("#burned-standards")
 
-	if  (standardsConsumed() != 0) {
+	if (standardsConsumed() != 0) {
 		activeStandards.innerText = `${standardsInSystem()}x standards in your system`
 		consumedStandards.innerText = `${standardsConsumed()}x standards consumed`
 		const burnedStandardsNumber = (
@@ -150,11 +160,9 @@ function renderStats() {
 
 	if (standardsConsumed() == 0) {
 		activeStandards.innerText = "Start drinking to check your stats"
-		consumedStandards.innerText = ''
-		burnedStandards.innerText = ''
-	} 
-	
-	
+		consumedStandards.innerText = ""
+		burnedStandards.innerText = ""
+	}
 }
 
 //Render drink
@@ -211,7 +219,7 @@ function renderDrink(drink) {
 //Calculation functions
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
-	if (volume == '.' || percentage == '.') return 0
+	if (volume == "." || percentage == ".") return 0
 	//Return the number of standards rounded to 1 decimal place
 	return ((volume / 1000) * percentage * 0.789).toFixed(1)
 }
@@ -331,9 +339,9 @@ function updateData() {
 
 //Simple function to run other functions that render the DOM
 function renderData() {
-		container.innerHTML = ""
-		drinks.forEach(renderDrink)
-		renderStats()
+	container.innerHTML = ""
+	drinks.forEach(renderDrink)
+	renderStats()
 }
 
 //Return the correct string for the drinkSubtitle
@@ -383,3 +391,27 @@ function standardsConsumed() {
 
 //TODO
 //Build a queuing system to burn through drinks in order of consumption
+//Build out compact view of existing drinks
+
+//Render a card that allows you to quickly have the same drink as last time
+function sameAgain() {
+	//Update drink data
+	loadDrinks()
+	//Grab the latest drink (First in the array as items are shifted in)
+	const drink = drinks[0]
+
+	//Grab elements
+	const sameAgainVolume = document.querySelector("#same-again-volume")
+	const sameAgainPercentage = document.querySelector("#same-again-percentage")
+	const sameAgainStandards = document.querySelector("#same-again-standards")
+	const sameAgainSubmit = document.querySelector("#same-again-submit")
+
+	//Set the text of all elements
+	sameAgainVolume.innerText = `${drink.volume}mls`
+	sameAgainPercentage.innerText = `${drink.percentage}%`
+	sameAgainStandards.innerText = `${drink.standards} standards`
+
+	return { volume: drink.volume, percentage: drink.percentage }
+}
+
+sameAgain()
