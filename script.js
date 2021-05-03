@@ -19,6 +19,14 @@ drinks.forEach(renderDrink)
 renderStats()
 console.log(navigator.userAgent)
 
+//Rerender the data every 20 seconds
+//This is a terrible idea
+//Absolutely need to implement a better solution than this
+
+setInterval(() => {
+	renderData()
+}, 20000);
+
 //Create the drink class
 class Drink {
 	constructor(volume, percentage) {
@@ -122,7 +130,6 @@ function renderEstimator(volume, percentage) {
 //Render the stats card
 function renderStats() {
 	//Ensure that all drink objects have the latest data before rendering
-	updateData()
 
 	//Grab the DOM elements needed
 	const statsCard = document.querySelector("#stats-card")
@@ -130,11 +137,7 @@ function renderStats() {
 	const consumedStandards = statsCard.querySelector("#consumed-standards")
 	const burnedStandards = statsCard.querySelector("#burned-standards")
 
-	if (standardsConsumed() == 0) {
-		activeStandards.innerText = "Start drinking to check your stats"
-		consumedStandards.remove()
-		burnedStandards.remove()
-	} else {
+	if  (standardsConsumed() != 0) {
 		activeStandards.innerText = `${standardsInSystem()}x standards in your system`
 		consumedStandards.innerText = `${standardsConsumed()}x standards consumed`
 		const burnedStandardsNumber = (
@@ -142,6 +145,14 @@ function renderStats() {
 		).toFixed(2)
 		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned`
 	}
+
+	if (standardsConsumed() == 0) {
+		activeStandards.innerText = "Start drinking to check your stats"
+		consumedStandards.innerText = ''
+		burnedStandards.innerText = ''
+	} 
+	
+	
 }
 
 //Render drink
@@ -317,9 +328,12 @@ function updateData() {
 
 //Simple function to run other functions that render the DOM
 function renderData() {
-	container.innerHTML = ""
-	drinks.forEach(renderDrink)
-	renderStats()
+	setTimeout(() => {
+		container.innerHTML = ""
+		drinks.forEach(renderDrink)
+		renderStats()
+	}, 100);
+
 }
 
 //Return the correct string for the drinkSubtitle
