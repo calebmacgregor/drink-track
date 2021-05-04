@@ -418,16 +418,3 @@ function standardsConsumed() {
 // 	console.log(drinks)
 // 	console.log(arrayOfEndTimes)
 // }
-
-let endOfQueue
-if (drinks.length == 1) {
-	endOfQueue = drinks[0].completeDatetime
-} else if (drinks.length > 1) {
-	endOfQueue = drinks.reduce((a, b) => {
-		a.completeDatetime > b.completeDatetime
-			? a.completeDatetime
-			: b.completeDatetime
-	}).completeDatetime
-}
-console.log(endOfQueue)
-console.log(drinks)
