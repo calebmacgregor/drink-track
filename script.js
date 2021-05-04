@@ -136,6 +136,7 @@ function renderStats() {
 	const activeStandards = statsCard.querySelector("#active-standards")
 	const consumedStandards = statsCard.querySelector("#consumed-standards")
 	const burnedStandards = statsCard.querySelector("#burned-standards")
+	const zeroStandards = statsCard.querySelector("#zero-standards")
 
 	if (standardsConsumed() != 0) {
 		activeStandards.innerText = `${standardsInSystem()}x standards in your system`
