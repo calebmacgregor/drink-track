@@ -17,7 +17,6 @@ const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 let drinks = loadDrinks()
 drinks.forEach(renderDrink)
 renderStats()
-console.log(navigator.userAgent)
 
 //Rerender the data every 20 seconds
 //This is a terrible idea
@@ -45,40 +44,6 @@ class Drink {
 		this.millisecondsToBurn = timeToBurn(this.standards).milliseconds
 	}
 }
-
-//Event listeners
-
-// //Listener to rotate between full and compact drink cards
-// document.addEventListener("click", (e) => {
-// 	if (!e.target.classList.contains("drink-card-related")) return
-
-// 	const drinkElement = e.target.closest(".drink-card")
-// 	const standardsElement = drinkElement.querySelector("#standards")
-// 	const datesElement = drinkElement.querySelector(".dates")
-// 	const buttonsElement = drinkElement.querySelector(".buttons")
-// 	const progressElement = drinkElement.querySelector("#progress")
-// 	const smallDeleteElement = drinkElement.querySelector("#small-delete-drink")
-// 	if (!drinkElement.classList.contains("compact")) {
-// 		drinkElement.classList.add("compact")
-// 		datesElement.style.display = "none"
-// 		buttonsElement.style.display = "none"
-// 		smallDeleteElement.style.display = "none"
-// 		drinkElement.style.height = "40px"
-// 		progressElement.style.width = "40%"
-// 		progressElement.style.marginLeft = "10rem"
-// 		standardsElement.style.left = "5%"
-// 	} else {
-// 		drinkElement.classList.remove("compact")
-// 		datesElement.style.display = "initial"
-// 		buttonsElement.style.display = "initial"
-// 		smallDeleteElement.style.display = "initial"
-// 		drinkElement.style.height = "200px"
-// 		progressElement.style.width = "70%"
-// 		progressElement.style.marginLeft = ""
-// 		standardsElement.style.left = "10%"
-// 	}
-// 	console.log(drinkElement)
-// })
 
 //Event listener to trigger estimator card render
 form.addEventListener("input", (e) => {

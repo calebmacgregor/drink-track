@@ -70,27 +70,19 @@
 		</div>
 
 		<template id="drink-template">
-			<div class="drink-card card drink-card-related" id="drink-card">
-				<button id="small-delete-drink" class="delete-drink drink-card-related">
-					X
-				</button>
-				<h3 id="standards" class="standards drink-card-related"></h3>
-				<div class="dates drink-card-related">
-					<p id="started-datetime" class="drink-card-related"></p>
-					<p id="finished-datetime" class="drink-card-related"></p>
-					<p id="drink-subtitle" class="drink-card-related"></p>
+			<div class="drink-card card" id="drink-card">
+				<button id="small-delete-drink" class="delete-drink">X</button>
+				<h3 id="standards" class="standards"></h3>
+				<div class="dates">
+					<p id="started-datetime"></p>
+					<p id="finished-datetime"></p>
+					<p id="drink-subtitle"></p>
 				</div>
 				<div class="buttons">
-					<button id="mark-drunk" class="drink-card-related">Finish</button>
-					<button id="delete-drink" class="delete-drink drink-card-related">
-						Delete
-					</button>
+					<button id="mark-drunk">Finish</button>
+					<button id="delete-drink" class="delete-drink">Delete</button>
 				</div>
-				<progress
-					id="progress"
-					value="=0"
-					class="drink-card-related"
-				></progress>
+				<progress id="progress" value="=0"></progress>
 			</div>
 		</template>
 
