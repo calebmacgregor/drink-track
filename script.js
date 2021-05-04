@@ -36,6 +36,8 @@ class Drink {
 		this.standards = standardsCalculator(volume, percentage)
 		this.logDatetime = new Date().getTime()
 		this.isDrunk = false
+		this.burnedDatetime = ""
+		this.isActive = ""
 		this.completeDatetime = ""
 		this.hoursToBurn = timeToBurn(this.standards).hours
 		this.minutesToBurn = timeToBurn(this.standards).minutes
@@ -45,6 +47,38 @@ class Drink {
 }
 
 //Event listeners
+
+// //Listener to rotate between full and compact drink cards
+// document.addEventListener("click", (e) => {
+// 	if (!e.target.classList.contains("drink-card-related")) return
+
+// 	const drinkElement = e.target.closest(".drink-card")
+// 	const standardsElement = drinkElement.querySelector("#standards")
+// 	const datesElement = drinkElement.querySelector(".dates")
+// 	const buttonsElement = drinkElement.querySelector(".buttons")
+// 	const progressElement = drinkElement.querySelector("#progress")
+// 	const smallDeleteElement = drinkElement.querySelector("#small-delete-drink")
+// 	if (!drinkElement.classList.contains("compact")) {
+// 		drinkElement.classList.add("compact")
+// 		datesElement.style.display = "none"
+// 		buttonsElement.style.display = "none"
+// 		smallDeleteElement.style.display = "none"
+// 		drinkElement.style.height = "40px"
+// 		progressElement.style.width = "40%"
+// 		progressElement.style.marginLeft = "10rem"
+// 		standardsElement.style.left = "5%"
+// 	} else {
+// 		drinkElement.classList.remove("compact")
+// 		datesElement.style.display = "initial"
+// 		buttonsElement.style.display = "initial"
+// 		smallDeleteElement.style.display = "initial"
+// 		drinkElement.style.height = "200px"
+// 		progressElement.style.width = "70%"
+// 		progressElement.style.marginLeft = ""
+// 		standardsElement.style.left = "10%"
+// 	}
+// 	console.log(drinkElement)
+// })
 
 //Event listener to trigger estimator card render
 form.addEventListener("input", (e) => {
@@ -112,7 +146,7 @@ document.addEventListener("click", (e) => {
 function renderEstimator(volume, percentage) {
 	const standards = standardsCalculator(volume, percentage)
 	const hoursToBurn = timeToBurn(standards).hours
-	const minutesToBurn = timeToBurn(standards).minutes
+	const minutesToBurn = timeToBurn(standards).minutes - hoursToBurn * 60
 
 	standardsEstimatorStandards.innerText = `${standards}x standards`
 	if (standards == 0) {
@@ -221,8 +255,8 @@ function timeToBurn(standards) {
 	//Multiply by 100 to round the fraction
 	//Divide by 100 to get back to a percentage
 	const hourFraction = Math.ceil((standards - hours) * 100) / 100
-	const minutes = 60 * hourFraction
-	const seconds = hours * 60 * 60 + minutes * 60
+	const minutes = 60 * hourFraction + hours * 60
+	const seconds = minutes * 60
 	const milliseconds = seconds * 1000
 	//Return an object with the hours and minutes both rounded up
 	return {
@@ -352,7 +386,9 @@ function setDrinkSubtitle(drinkObject, drinkElement) {
 	} else if (!drinkObject.hoursToBurn && drinkObject.minutesToBurn) {
 		return `Will take ${drinkObject.minutesToBurn} minutes to burn off`
 	} else if (drinkObject.hoursToBurn && drinkObject.minutesToBurn) {
-		return `Will take ${drinkObject.hoursToBurn} hours and ${drinkObject.minutesToBurn} minutes to burn off`
+		return `Will take ${drinkObject.hoursToBurn} hours and ${
+			drinkObject.minutesToBurn - drinkObject.hoursToBurn * 60
+		} minutes to burn off`
 	} else {
 		return `If you can see this, something's broken`
 	}
@@ -381,3 +417,52 @@ function standardsConsumed() {
 //TODO
 //Build a queuing system to burn through drinks in order of consumption
 //Build out compact view of existing drinks
+
+//Implement a queuing system
+//Mark an end time for each drinks burn
+//Mark a start time for burn as the end date of the prior drinks burn
+
+//Set a burn end time for every drink based on the millisecondsToBurn field and the burn start time
+//Set a burn start time for every drink based on the burn end time of the previous drink
+//Define the previous drink as the drink with the largest end time
+//If no drinks with an end time exist, set the burn start time to now
+// drinks.forEach((d) => console.log(timeConverter(d.completeDatetime)))
+// drinks.forEach((d) => console.log(d.minutesToBurn))
+// drinks.forEach((d) => console.log(d))
+// // const burnEndTime = drink.completeDatetime + drink.millisecondsToBurn
+
+// function burnQueue() {
+// 	let endOfQueueDrink
+// 	let arrayOfEndTimes = drinks.map((d) => {
+// 		if (d.burnEndTime) {
+// 			return d
+// 		}
+// 	})
+// 	if (drinks.length == 0) {
+// 		endOfQueueDrink = new Date().getTime
+// 	} else if (burnEndTime.length > 0) {
+// 		//Return the drink object with the largest end of queue
+// 		endOfQueueDrink = drinks.reduce((previous, current) => {
+// 			return previous.burnEndTime > current.burnEndTime ? previous : current
+// 		}).burnEndTime
+// 	} else {
+// 	}
+// 	console.log("burn queue has run")
+// 	console.log(endOfQueueDrink)
+// 	console.log("All drinks")
+// 	console.log(drinks)
+// 	console.log(arrayOfEndTimes)
+// }
+
+let endOfQueue
+if (drinks.length == 1) {
+	endOfQueue = drinks[0].completeDatetime
+} else if (drinks.length > 1) {
+	endOfQueue = drinks.reduce((a, b) => {
+		a.completeDatetime > b.completeDatetime
+			? a.completeDatetime
+			: b.completeDatetime
+	}).completeDatetime
+}
+console.log(endOfQueue)
+console.log(drinks)
