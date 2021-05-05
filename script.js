@@ -76,27 +76,32 @@ form.addEventListener("submit", (e) => {
 	renderData()
 })
 
+//Function to delete on confirm delete
+//Set as a named function so that it is removable
+function confirmDelete(e) {
+	if (!e.target.classList.contains("delete-confirm")) return
+	const DOMDrink = e.target.closest("#drink-card")
+	deleteDrink(DOMDrink)
+
+	updateData()
+	renderData()
+}
+
 //Add a delete-confirm drink class to the small delete button on initial click
 //Remove it after 3 seconds
 document.addEventListener("click", (e) => {
 	if (!e.target.matches("#small-delete-drink")) return
 
-	e.target.innerText = "Delete"
 	e.target.classList.add("delete-confirm")
+	e.target.innerText = "Delete"
 
 	//Add deletion event listener
-	e.target.addEventListener("click", () => {
-		if (!e.target.classList.contains("delete-confirm")) return
-		const DOMDrink = e.target.closest("#drink-card")
-		deleteDrink(DOMDrink)
-
-		updateData()
-		renderData()
-	})
+	e.target.addEventListener("click", confirmDelete)
 
 	setTimeout(() => {
-		e.target.innerText = "X"
 		e.target.classList.remove("delete-confirm")
+		e.target.innerText = "X"
+		e.target.removeEventListener("click", confirmDelete)
 	}, 3000)
 })
 
