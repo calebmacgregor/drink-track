@@ -42,14 +42,21 @@
 			<form class="form" id="form">
 				<div class="inputs">
 					<label for="volume"></label>
-					<input
+					<!-- <input
 						type="number"
 						inputmode="decimal"
 						class="volume-input"
 						id="volume-input"
 						name="volume"
 						placeholder="Volume"
-					/>
+					/> -->
+					<select name="volume" id="volume-input">
+						<option value="" selected disabled id="default-select">Size</option>
+						<option value="Pint">Pint</option>
+						<option value="Schooner">Schooner</option>
+						<option value="Pot">Pot</option>
+						<option value="Shot">Shot</option>
+					</select>
 
 					<label for="percentage"></label>
 					<input
@@ -72,7 +79,7 @@
 
 		<template id="drink-template">
 			<div class="drink-card card" id="drink-card">
-				<button id="small-delete-drink" class="delete-drink">X</button>
+				<button id="small-delete-drink">X</button>
 				<h3 id="standards" class="standards"></h3>
 				<div class="dates">
 					<p id="started-datetime"></p>

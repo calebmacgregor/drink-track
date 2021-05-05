@@ -76,6 +76,30 @@ form.addEventListener("submit", (e) => {
 	renderData()
 })
 
+//Add a delete-confirm drink class to the small delete button on initial click
+//Remove it after 3 seconds
+document.addEventListener("click", (e) => {
+	if (!e.target.matches("#small-delete-drink")) return
+
+	e.target.innerText = "Delete"
+	e.target.classList.add("delete-confirm")
+
+	//Add deletion event listener
+	e.target.addEventListener("click", () => {
+		if (!e.target.classList.contains("delete-confirm")) return
+		const DOMDrink = e.target.closest("#drink-card")
+		deleteDrink(DOMDrink)
+
+		updateData()
+		renderData()
+	})
+
+	setTimeout(() => {
+		e.target.innerText = "X"
+		e.target.classList.remove("delete-confirm")
+	}, 3000)
+})
+
 //Delete drinks when the delete button is clicked
 document.addEventListener("click", (e) => {
 	//Short circuit if the element clicked is not the button with the ID of delete-drink
@@ -209,8 +233,18 @@ function renderDrink(drink) {
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
 	if (volume == "." || percentage == ".") return 0
+	let volumeML
+	if (volume == "Pint") {
+		volumeMl = 570
+	} else if (volume == "Schooner") {
+		volumeML = 425
+	} else if (volume == "Pot") {
+		volumeML = 285
+	} else if (volume == "Shot") {
+		volumeML = 30
+	} else return
 	//Return the number of standards rounded to 1 decimal place
-	return ((volume / 1000) * percentage * 0.789).toFixed(1)
+	return ((volumeML / 1000) * percentage * 0.789).toFixed(1)
 }
 
 //Calculate the time taken to burn off the alcohol in a drink

@@ -137,14 +137,19 @@ body {
 
 .inputs {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-evenly;
+}
+
+select {
+	-webkit-appearance: none;
 }
 
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 }
 
-input {
+input,
+select {
 	background-color: #f8f8f2;
 	padding: 0.5rem;
 	margin: 0.5rem;
@@ -156,7 +161,7 @@ input {
 }
 
 input::placeholder {
-	color: hsl(0, 4%, 45%);
+	color: hsl(0, 4%, 0%);
 	font-weight: bold;
 }
 
@@ -261,6 +266,11 @@ button {
 
 #small-delete-drink:focus {
 	width: 3rem;
+	border-radius: 5px;
+}
+
+#small-delete-drink.delete-confirm {
+	width: 5rem;
 	border-radius: 5px;
 }
 
