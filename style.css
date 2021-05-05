@@ -266,11 +266,6 @@ button {
 	transition: ease 150ms;
 }
 
-#small-delete-drink:focus {
-	width: 3rem;
-	border-radius: 5px;
-}
-
 #small-delete-drink.delete-confirm {
 	width: 5rem;
 	border-radius: 5px;

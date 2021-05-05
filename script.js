@@ -92,7 +92,11 @@ document.addEventListener("click", (e) => {
 	if (!e.target.matches("#small-delete-drink")) return
 
 	e.target.classList.add("delete-confirm")
-	e.target.innerText = "Delete"
+	e.target.innerText = ""
+	//Update text once the button has grown
+	setTimeout(() => {
+		e.target.innerText = "Delete"
+	}, 150)
 
 	//Add deletion event listener
 	e.target.addEventListener("click", confirmDelete)
