@@ -162,6 +162,7 @@ function renderEstimator(volume, percentage) {
 //Render the stats card
 function renderStats() {
 	//Ensure that all drink objects have the latest data before rendering
+	updateData()
 
 	//Grab the DOM elements needed
 	const statsCard = document.querySelector("#stats-card")
