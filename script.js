@@ -21,7 +21,6 @@ renderStats()
 //Rerender the data every 20 seconds
 //This is a terrible idea
 //Absolutely need to implement a better solution than this
-
 setInterval(() => {
 	renderData()
 }, 20000)
@@ -238,9 +237,9 @@ function renderDrink(drink) {
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
 	if (volume == "." || percentage == ".") return 0
-	let volumeML
+	let volumeML = 0
 	if (volume == "Pint") {
-		volumeMl = 570
+		volumeML = 570
 	} else if (volume == "Schooner") {
 		volumeML = 425
 	} else if (volume == "Pot") {
