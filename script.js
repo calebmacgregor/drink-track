@@ -176,7 +176,7 @@ function renderStats() {
 		}x standards in your system`
 		consumedStandards.innerText = `${standardsConsumed()}x standards consumed`
 		const burnedStandardsNumber = (
-			standardsConsumed() - standardsInSystem()
+			standardsConsumed() - standardsInSystem().standardsInSystem
 		).toFixed(2)
 		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned`
 	}
