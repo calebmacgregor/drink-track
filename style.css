@@ -106,29 +106,35 @@ span {
 
 .input-card {
 	position: relative;
-	align-items: center;
-	justify-content: center;
+	/* align-items: center; */
+	/* justify-content: center; */
 	color: #f8f8f2;
 	background-color: #5644c7;
-	height: 309px;
+	height: 12rem;
 }
 
-.title {
-	position: absolute;
-	top: 5%;
-	left: 10%;
+.standards-estimator-content {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10%;
+	margin-top: 15px;
+	height: 90%;
 }
 
-#standards-estimator-standards {
-	position: absolute;
-	top: 35%;
-	left: 10%;
+#add-drink-title {
+	/* position: absolute;
+	top: 10%;
+	left: 10%; */
+	margin-bottom: 0.2rem;
+	transition: ease 250ms;
 }
 
-#standards-estimator-burnoff {
-	position: absolute;
-	left: 10%;
-	top: 45%;
+#add-drink-title.shrunk {
+	font-size: 12px;
+}
+
+#standards-estimator-standards-subtitle {
+	font-size: 12px;
 }
 
 .form {
@@ -144,10 +150,6 @@ span {
 .title,
 .standards-estimator {
 	width: 100%;
-}
-
-.add-drink-title {
-	width: 50%;
 }
 
 .inputs {

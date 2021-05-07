@@ -35,26 +35,18 @@
 		</div>
 
 		<div class="input-card card" id="input-card">
-			<div class="title" id="title">
-				<h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
-			</div>
-			<div class="standards-estimator" id="standards-estimator">
-				<h3 id="standards-estimator-standards">
-					Enter the volume and percentage
-				</h3>
-				<p id="standards-estimator-burnoff"></p>
+			<div class="standards-estimator-content">
+				<div class="title" id="title">
+					<h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
+				</div>
+				<div class="standards-estimator" id="standards-estimator">
+					<h2 id="standards-estimator-standards"></h2>
+					<h4 id="standards-estimator-standards-subtitle"></h4>
+				</div>
 			</div>
 			<form class="form" id="form">
 				<div class="inputs">
 					<label for="volume"></label>
-					<!-- <input
-						type="number"
-						inputmode="decimal"
-						class="volume-input"
-						id="volume-input"
-						name="volume"
-						placeholder="Volume"
-					/> -->
 					<select name="volume" id="volume-input">
 						<option value="" selected disabled id="default-select">Size</option>
 						<option value="Pint">Pint</option>

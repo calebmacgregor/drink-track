@@ -49,11 +49,7 @@ form.addEventListener("input", (e) => {
 	const volume = volumeInput.value
 	const percentage = percentageInput.value
 
-	volume && percentage
-		? renderEstimator(volume, percentage)
-		: (standardsEstimatorBurnoff.innerText = "") &&
-		  (standardsEstimatorStandards.innerText =
-				"Enter the volume and percentage")
+	if (volume && percentage) renderEstimator(volume, percentage)
 })
 
 //Event listener to add new drinks to the beginning of the drinks storage array
@@ -63,13 +59,19 @@ form.addEventListener("submit", (e) => {
 	const percentage = percentageInput.value
 	if (!volume || !percentage) return
 	const drink = new Drink(volume, percentage)
+	const addDrinkTitle = document.querySelector("#add-drink-title")
+	const standardsEstimatorStandardsSubtitle = document.querySelector(
+		"#standards-estimator-standards-subtitle"
+	)
 
 	drinks.unshift(drink)
 
 	volumeInput.value = ""
 	percentageInput.value = ""
-	standardsEstimatorStandards.innerText = "Enter the volume and percentage"
-	standardsEstimatorBurnoff.innerText = ""
+	standardsEstimatorStandards.innerText = ""
+	standardsEstimatorStandardsSubtitle.innerText = ""
+
+	addDrinkTitle.classList.remove("shrunk")
 
 	updateData()
 	renderData()
@@ -144,19 +146,42 @@ function renderEstimator(volume, percentage) {
 	const standards = standardsCalculator(volume, percentage)
 	const hoursToBurn = timeToBurn(standards).hours
 	const minutesToBurn = timeToBurn(standards).minutes - hoursToBurn * 60
+	const addDrinkTitle = document.querySelector("#add-drink-title")
+	const standardsEstimatorSubtitle = document.querySelector(
+		"#standards-estimator-standards-subtitle"
+	)
 
-	standardsEstimatorStandards.innerText = `${standards}x standards`
-	if (standards == 0) {
-		standardsEstimatorBurnoff.innerText = `That's barely alcoholic`
-	} else if (hoursToBurn > 0 && minutesToBurn == 0) {
-		standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours flat`
-	} else if (hoursToBurn == 0 && minutesToBurn > 0) {
-		standardsEstimatorBurnoff.innerText = `Burned off in ${minutesToBurn} minutes`
-	} else if (hoursToBurn > 0 && minutesToBurn > 0) {
-		standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours and ${minutesToBurn} minutes`
+	if (volume && percentage) {
+		console.log(true)
+		addDrinkTitle.classList.add("shrunk")
 	} else {
-		standardsEstimatorBurnoff.innerText = `If you can see this, something's broken`
+		console.log(false)
+		addDrinkTitle.classList.remove("shrunk")
 	}
+
+	//Set a very small delay so that the title has time to animate
+	//Run this through an if statement so that it only slows down on the first render
+	if (!volume && !percentage) {
+		setTimeout(() => {
+			standardsEstimatorStandards.innerText = `${standards}x Standards`
+			standardsEstimatorSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+		}, 200)
+	} else {
+		standardsEstimatorStandards.innerText = `${standards}x Standards`
+		standardsEstimatorSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+	}
+
+	// if (standards == 0) {
+	// 	standardsEstimatorBurnoff.innerText = `That's barely alcoholic`
+	// } else if (hoursToBurn > 0 && minutesToBurn == 0) {
+	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours flat`
+	// } else if (hoursToBurn == 0 && minutesToBurn > 0) {
+	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${minutesToBurn} minutes`
+	// } else if (hoursToBurn > 0 && minutesToBurn > 0) {
+	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours and ${minutesToBurn} minutes`
+	// } else {
+	// 	standardsEstimatorBurnoff.innerText = `If you can see this, something's broken`
+	// }
 }
 
 //Render the stats card
@@ -165,7 +190,6 @@ function renderStats() {
 	updateData()
 
 	//Grab the DOM elements needed
-	const statsCard = document.querySelector("#stats-card")
 	const activeStandards = document.querySelector("#active-standards")
 	const activeStandardsSubtitle = document.querySelector(
 		"#active-standards-subtitle"
@@ -174,9 +198,7 @@ function renderStats() {
 	const standardsCountdownSubtitle = document.querySelector(
 		"#standards-countdown-subtitle"
 	)
-
 	const allClear = document.querySelector("#all-clear")
-	const allClearSpan = document.createElement("span")
 
 	const hours = Math.floor(
 		standardsInSystem().millisecondsTillAllClear / 1000 / 60 / 60
