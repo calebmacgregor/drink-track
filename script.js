@@ -360,7 +360,7 @@ function timeToBurn(standards) {
 	const hourFraction = Math.ceil((standards - hours) * 100) / 100
 	const minutes = 60 * hourFraction + hours * 60
 	const seconds = minutes * 60
-	const milliseconds = (standardsToGrams / 10) * 60 * 60 * 1000
+	const milliseconds = standards * 60 * 60 * 1000
 	//Return an object with the hours and minutes both rounded up
 	return {
 		hours: Math.ceil(hours),
