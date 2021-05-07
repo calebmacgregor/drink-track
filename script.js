@@ -331,8 +331,8 @@ function drinkQueue() {
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
 	const drinkSizeMapping = [
-		{ name: "pint-570", volume: "570" },
-		{ name: "schooner-425", volume: "425" },
+		{ name: "pint-570", volume: 570 },
+		{ name: "schooner-425", volume: 425 },
 		{ name: "pot-285", volume: 285 },
 		{ name: "can-375", volume: 375 },
 		{ name: "can-355", volume: 355 },
@@ -340,12 +340,10 @@ function standardsCalculator(volume, percentage) {
 		{ name: "shot-30", volume: 30 }
 	]
 
+	const volumeML = drinkSizeMapping.find((element) => element.name == volume)
+		.volume
+
 	if (volume == "." || percentage == ".") return
-
-	const volumeML = drinkSizeMapping.find(
-		(element) => (element.name = "pint-570")
-	).volume
-
 	//Return the number of standards rounded to 1 decimal place
 	return ((volumeML / 1000) * percentage * 0.789).toFixed(1)
 }
