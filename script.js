@@ -1,14 +1,11 @@
 //Global variables
 const object = document.querySelector("#object-list")
-const template = document.querySelector("#drink-template")
+
 const form = document.querySelector("#form")
 const volumeInput = document.querySelector("#volume-input")
 const percentageInput = document.querySelector("#percentage-input")
 const standardsEstimatorStandards = document.querySelector(
 	"#standards-estimator-standards"
-)
-const standardsEstimatorBurnoff = document.querySelector(
-	"#standards-estimator-burnoff"
 )
 
 const LOCAL_STORAGE_PREFIX = "DRINK_TRACK"
@@ -45,7 +42,7 @@ class Drink {
 }
 
 //Event listener to trigger estimator card render
-form.addEventListener("input", (e) => {
+form.addEventListener("input", () => {
 	const volume = volumeInput.value
 	const percentage = percentageInput.value
 
@@ -55,8 +52,10 @@ form.addEventListener("input", (e) => {
 //Event listener to add new drinks to the beginning of the drinks storage array
 form.addEventListener("submit", (e) => {
 	e.preventDefault()
+
 	const volume = volumeInput.value
 	const percentage = percentageInput.value
+
 	if (!volume || !percentage) return
 	const drink = new Drink(volume, percentage)
 	const addDrinkTitle = document.querySelector("#add-drink-title")
@@ -131,7 +130,12 @@ document.addEventListener("click", (e) => {
 	//Prevent the default behaviour
 	e.preventDefault()
 
+	const addDrinkTitle = document.querySelector("#add-drink-title")
+
+	addDrinkTitle.classList.remove("shrunk")
+
 	const DOMDrink = e.target.closest("#drink-card")
+
 	markDrunk(DOMDrink)
 
 	updateData()
@@ -141,83 +145,71 @@ document.addEventListener("click", (e) => {
 //Functions
 
 //Render functions
+
 //Render the estimator card
 function renderEstimator(volume, percentage) {
 	const standards = standardsCalculator(volume, percentage)
 	const hoursToBurn = timeToBurn(standards).hours
 	const minutesToBurn = timeToBurn(standards).minutes - hoursToBurn * 60
 	const addDrinkTitle = document.querySelector("#add-drink-title")
-	const standardsEstimatorSubtitle = document.querySelector(
+	const standardsEstimatorStandardsSubtitle = document.querySelector(
 		"#standards-estimator-standards-subtitle"
 	)
 
-	if (volume && percentage) {
-		console.log(true)
-		addDrinkTitle.classList.add("shrunk")
-	} else {
-		console.log(false)
-		addDrinkTitle.classList.remove("shrunk")
-	}
+	if (volume && percentage) addDrinkTitle.classList.add("shrunk")
 
 	//Set a very small delay so that the title has time to animate
 	//Run this through an if statement so that it only slows down on the first render
-	if (!volume && !percentage) {
-		setTimeout(() => {
-			standardsEstimatorStandards.innerText = `${standards}x Standards`
-			standardsEstimatorSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
-		}, 200)
-	} else {
+	function updateStandardsEstimator() {
 		standardsEstimatorStandards.innerText = `${standards}x Standards`
-		standardsEstimatorSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+		standardsEstimatorStandardsSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
 	}
 
-	// if (standards == 0) {
-	// 	standardsEstimatorBurnoff.innerText = `That's barely alcoholic`
-	// } else if (hoursToBurn > 0 && minutesToBurn == 0) {
-	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours flat`
-	// } else if (hoursToBurn == 0 && minutesToBurn > 0) {
-	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${minutesToBurn} minutes`
-	// } else if (hoursToBurn > 0 && minutesToBurn > 0) {
-	// 	standardsEstimatorBurnoff.innerText = `Burned off in ${hoursToBurn} hours and ${minutesToBurn} minutes`
-	// } else {
-	// 	standardsEstimatorBurnoff.innerText = `If you can see this, something's broken`
-	// }
+	if (!volume && !percentage) {
+		setTimeout(() => {
+			updateStandardsEstimator()
+		}, 200)
+	} else {
+		updateStandardsEstimator()
+	}
 }
 
 //Render the stats card
 function renderStats() {
 	//Ensure that all drink objects have the latest data before rendering
 	updateData()
-
 	//Grab the DOM elements needed
 	const activeStandards = document.querySelector("#active-standards")
 	const activeStandardsSubtitle = document.querySelector(
 		"#active-standards-subtitle"
 	)
 	const standardsCountdown = document.querySelector("#standards-countdown")
-	const standardsCountdownSubtitle = document.querySelector(
-		"#standards-countdown-subtitle"
-	)
+
 	const allClear = document.querySelector("#all-clear")
 
-	const hours = Math.floor(
+	const hoursTillAllClear = Math.floor(
 		standardsInSystem().millisecondsTillAllClear / 1000 / 60 / 60
 	)
-	const minutes = Math.floor(
-		standardsInSystem().millisecondsTillAllClear / 1000 / 60 - hours * 60
+	const minutesTillAllClear = Math.floor(
+		standardsInSystem().millisecondsTillAllClear / 1000 / 60 -
+			hoursTillAllClear * 60
 	)
 
 	if (standardsConsumed() != 0) {
 		activeStandards.innerText = `${
 			standardsInSystem().standardsInSystem
 		}x standards`
+
+		//Set values and make items visible when drinks are in the system
 		activeStandardsSubtitle.innerText = "currently in your system"
 		activeStandardsSubtitle.style.display = "block"
 
-		standardsCountdown.innerText = `${hours} hours and ${minutes} minutes`
+		if (hoursTillAllClear == 0) {
+			standardsCountdown.innerText = `${minutesTillAllClear} minutes\ntill zero standards`
+		} else {
+			standardsCountdown.innerText = `${hoursTillAllClear} hours and ${minutesTillAllClear} minutes\ntill zero standards`
+		}
 		standardsCountdown.style.display = "block"
-		standardsCountdownSubtitle.innerText = `till zero standards`
-		standardsCountdownSubtitle.style.display = "block"
 
 		allClear.innerText = `All clear by ${timeConverter(
 			standardsInSystem().allClearTime
@@ -231,7 +223,6 @@ function renderStats() {
 		activeStandardsSubtitle.style.display = "none"
 		allClear.style.display = "none"
 		standardsCountdown.style.display = "none"
-		standardsCountdownSubtitle.style.display = "none"
 	}
 }
 
@@ -241,15 +232,16 @@ function renderDrink(drink) {
 	updateData()
 
 	//Grab the list that drinks will be rendered to
+	const template = document.querySelector("#drink-template")
 	const container = document.querySelector("#container")
 
 	//Grab the individual elements used in rendering
 	const templateClone = template.content.cloneNode(true)
 	const drinkContainer = templateClone.querySelector("#drink-card")
 	const standards = templateClone.querySelector("#standards")
-	const startedDatetime = templateClone.querySelector("#started-datetime")
+	const burnStartDatetime = templateClone.querySelector("#burn_start-datetime")
 	const finishedDatetime = templateClone.querySelector("#finished-datetime")
-	const drinkSubtitle = templateClone.querySelector("#drink-subtitle")
+	const burnedDatetime = templateClone.querySelector("#burned-datetime")
 	const drinkButton = templateClone.querySelector("#mark-drunk")
 	const deleteButton = templateClone.querySelector("#delete-drink")
 	const smallDeleteButton = templateClone.querySelector("#small-delete-drink")
@@ -258,13 +250,11 @@ function renderDrink(drink) {
 	//Add a 'drunk' class to a drink-card if that drink has been drunk
 	drink.isDrunk ? drinkContainer.classList.add("drunk") : ""
 
-	//Remove the 'drink' button from the element if it has been marked as drunk
-	drinkContainer.classList.contains("drunk") ? drinkButton.remove() : ""
-
 	//Remove the 'delete' button from the element if it has been marked as drunk
 	if (drinkContainer.classList.contains("drunk")) {
 		progressBar.value = drink.percentBurned
 		drinkContainer.classList.contains("drunk") ? deleteButton.remove() : ""
+		drinkButton.remove()
 	} else {
 		progressBar.remove()
 		smallDeleteButton.remove()
@@ -275,13 +265,19 @@ function renderDrink(drink) {
 
 	//Render the number of standards
 	standards.innerText = `${drink.standards}x standards`
-	//Render the time the drink was started
-	startedDatetime.innerText = `Started at ${timeConverter(drink.logDatetime)}`
-	//Render the time the drink was finished, or remove that element if the drink has not been finished
+
 	finishedDatetime.innerText = drink.completeDatetime
 		? `Drunk by ${timeConverter(drink.completeDatetime)}`
 		: ""
-	drinkSubtitle.innerText = setDrinkSubtitle(drink, drinkContainer)
+
+	burnStartDatetime.innerText = drink.burnStartTime
+		? `Starts burning at ${timeConverter(drink.burnStartTime)}`
+		: ""
+
+	burnedDatetime.innerText = drink.predictedBurnTime
+		? `Burned by ${timeConverter(drink.predictedBurnTime)}`
+		: ""
+
 	//Render the element to the DOM
 	container.appendChild(templateClone)
 }
@@ -310,12 +306,6 @@ function drinkQueue() {
 			drink.burnStartTime = earliestBurnStart
 			drink.predictedBurnTime = earliestBurnStart + drink.millisecondsToBurn
 
-			// if (drink.burnStartTime < new Date().getTime()) {
-			// 	drink.startedBurning = true
-			// } else {
-			// 	drink.startedBurning = false
-			// }
-
 			drink.startedBurning = true
 
 			earliestBurnStart = drink.predictedBurnTime
@@ -340,23 +330,22 @@ function drinkQueue() {
 
 //Calculate the number of standards in a drink
 function standardsCalculator(volume, percentage) {
-	if (volume == "." || percentage == ".") return 0
-	let volumeML = 0
-	if (volume == "Pint") {
-		volumeML = 570
-	} else if (volume == "Schooner") {
-		volumeML = 425
-	} else if (volume == "Pot") {
-		volumeML = 285
-	} else if (volume == "can-375") {
-		volumeML = 375
-	} else if (volume == "can-355") {
-		volumeML = 355
-	} else if (volume == "can-330") {
-		volumeML = 330
-	} else if (volume == "Shot") {
-		volumeML = 30
-	} else return
+	const drinkSizeMapping = [
+		{ name: "pint-570", volume: "570" },
+		{ name: "schooner-425", volume: "425" },
+		{ name: "pot-285", volume: 285 },
+		{ name: "can-375", volume: 375 },
+		{ name: "can-355", volume: 355 },
+		{ name: "can-330", volume: 330 },
+		{ name: "shot-30", volume: 30 }
+	]
+
+	if (volume == "." || percentage == ".") return
+
+	const volumeML = drinkSizeMapping.find(
+		(element) => (element.name = "pint-570")
+	).volume
+
 	//Return the number of standards rounded to 1 decimal place
 	return ((volumeML / 1000) * percentage * 0.789).toFixed(1)
 }
@@ -365,7 +354,6 @@ function standardsCalculator(volume, percentage) {
 //This function needs adjusting to be more like the alcoholRemaining
 //Realistically they need to just be complementary - before and after style
 function timeToBurn(standards) {
-	const standardsToGrams = standards * 10
 	const hours = Math.floor(standards)
 	//Multiply by 100 to round the fraction
 	//Divide by 100 to get back to a percentage
@@ -398,20 +386,22 @@ function alcoholRemaining(drink) {
 			: secondsSinceCompleted / drink.secondsToBurn
 
 	let standardsRemaining
+
 	if (drink.standards - drink.standards * percentBurned < 0) {
+		//If there's less than 0% remaining on the drink, reset it to 0
 		standardsRemaining = 0
 	} else if (drink.startedBurning == true) {
+		//If the drink has started burning, calculate the standards remaining
 		standardsRemaining = drink.standards - drink.standards * percentBurned
 	} else if (drink.isDrunk == true) {
+		//If the drink hasn't started burning then set the standards
+		//equal to the standards calculated by standardsCalculator
 		standardsRemaining = drink.standards
 	} else {
+		//Coverall that will break things if we hit an exception
+		//I should probably handle errors properly
 		standardsRemaining = "error"
 	}
-
-	// =
-	// drink.standards - drink.standards * percentBurned < 0
-	// 	? 0
-	// 	: drink.standards - drink.standards * percentBurned
 
 	const burnedOff = standardsRemaining > 0 ? false : true
 
@@ -486,7 +476,6 @@ function markDrunk(drinkElement) {
 //Utility/helper functions
 //Creates 12 hour time strings from datetime integers
 function timeConverter(dateTime) {
-	//convert the datetime from a string back to a datetime object
 	dateTime = new Date(dateTime)
 	return dateTime.toLocaleTimeString(["en-AU"], {
 		timeStyle: "short"
@@ -510,21 +499,6 @@ function renderData() {
 	container.innerHTML = ""
 	drinks.forEach(renderDrink)
 	renderStats()
-}
-
-//Return the correct string for the drinkSubtitle
-//Probably needs a rework sometime soon
-function setDrinkSubtitle(drinkObject, drinkElement) {
-	if (
-		!drinkElement.classList.contains("drunk") &&
-		drinkObject.startedBurning == false
-	) {
-		return ""
-	} else if (drinkObject.startedBurning == true) {
-		return `Burned off by ${timeConverter(drinkObject.predictedBurnTime)}`
-	} else if (drinkObject.startedBurning == false) {
-		return `Will be burned by ${timeConverter(drinkObject.predictedBurnTime)}`
-	}
 }
 
 //Build a system to calculate the amount of alcohol still in someone's system
@@ -554,7 +528,7 @@ function standardsConsumed() {
 }
 
 //TODO
-//Build a queuing system to burn through drinks in order of consumption
-//Build out compact view of existing drinks
-
-console.log(drinks)
+//Redesign drink card
+//Fix all absolute positionining
+//Handle every standard iphone screen size
+//Replace pixel widths with relative widths

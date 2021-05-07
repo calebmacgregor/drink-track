@@ -84,7 +84,8 @@ body {
 }
 
 #all-clear {
-	font-size: 10px;
+	padding-top: 1rem;
+	font-size: 12px;
 }
 
 span {
@@ -195,7 +196,7 @@ input::placeholder {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	height: 200px;
+	height: 150px;
 }
 
 #standards {
@@ -205,9 +206,10 @@ input::placeholder {
 	top: 15%;
 }
 
-.dates {
+.times {
 	position: absolute;
-	top: 35%;
+	font-size: 12px;
+	top: 40%;
 	left: 10%;
 	height: 30%;
 	width: 100%;
