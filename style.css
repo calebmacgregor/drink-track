@@ -59,11 +59,6 @@ body {
 	margin: 1rem;
 }
 
-.card:hover {
-	transform: scale(1.01);
-	box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
-}
-
 /*  */
 /*  */
 /* Stats card styling */
@@ -285,10 +280,6 @@ button {
 #small-delete-drink.delete-confirm {
 	width: 5rem;
 	border-radius: 5px;
-}
-
-button:hover {
-	background-color: hsl(325, 84%, 50%);
 }
 
 button:active {
