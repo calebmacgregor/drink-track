@@ -18,21 +18,15 @@
 }
 
 h3 {
-	font-size: 20px;
 	font-weight: bold;
 }
 
-h4 {
-	font-size: 16px;
-}
-
 p {
-	font-size: 11px;
 	font-weight: bold;
 }
 
 body {
-	background-color: #302288;
+	background-color: #4a3ba7;
 	padding-top: 3rem;
 	padding-bottom: 2rem;
 	display: flex;
@@ -56,7 +50,7 @@ body {
 .card {
 	display: flex;
 	flex-direction: column;
-	background-color: #5c3dcf;
+	background-color: #5644c7;
 	color: white;
 	width: 307px;
 	border-radius: 5px;
@@ -77,11 +71,31 @@ body {
 /*  */
 
 .stats-card {
+	color: white;
+	width: 307px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-	padding: 2rem;
-	height: 310px;
+	padding: 1rem;
+	height: 12rem;
+}
+
+.stats-card h1 {
+	font-size: 32px;
+}
+
+.stats-card h4 {
+	font-size: 16px;
+}
+
+#all-clear {
+	font-size: 10px;
+}
+
+span {
+	vertical-align: middle;
+	font-size: inherit;
+	color: #ee3fa4;
 }
 
 /*  */

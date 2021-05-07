@@ -16,6 +16,7 @@ const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 
 let drinks = loadDrinks()
 drinks.forEach(renderDrink)
+updateData()
 renderStats()
 
 //Rerender the data every 20 seconds
@@ -165,26 +166,50 @@ function renderStats() {
 
 	//Grab the DOM elements needed
 	const statsCard = document.querySelector("#stats-card")
-	const activeStandards = statsCard.querySelector("#active-standards")
-	const consumedStandards = statsCard.querySelector("#consumed-standards")
-	const burnedStandards = statsCard.querySelector("#burned-standards")
-	const zeroStandards = statsCard.querySelector("#zero-standards")
+	const activeStandards = document.querySelector("#active-standards")
+	const activeStandardsSubtitle = document.querySelector(
+		"#active-standards-subtitle"
+	)
+	const standardsCountdown = document.querySelector("#standards-countdown")
+	const standardsCountdownSubtitle = document.querySelector(
+		"#standards-countdown-subtitle"
+	)
+
+	const allClear = document.querySelector("#all-clear")
+	const allClearSpan = document.createElement("span")
+
+	const hours = Math.floor(
+		standardsInSystem().millisecondsTillAllClear / 1000 / 60 / 60
+	)
+	const minutes = Math.floor(
+		standardsInSystem().millisecondsTillAllClear / 1000 / 60 - hours * 60
+	)
 
 	if (standardsConsumed() != 0) {
 		activeStandards.innerText = `${
 			standardsInSystem().standardsInSystem
-		}x standards in your system`
-		consumedStandards.innerText = `${standardsConsumed()}x standards consumed`
-		const burnedStandardsNumber = (
-			standardsConsumed() - standardsInSystem().standardsInSystem
-		).toFixed(2)
-		burnedStandards.innerText = `${burnedStandardsNumber}x standards burned`
+		}x standards`
+		activeStandardsSubtitle.innerText = "currently in your system"
+		activeStandardsSubtitle.style.display = "block"
+
+		standardsCountdown.innerText = `${hours} hours and ${minutes} minutes`
+		standardsCountdown.style.display = "block"
+		standardsCountdownSubtitle.innerText = `till zero standards`
+		standardsCountdownSubtitle.style.display = "block"
+
+		allClear.innerText = `All clear by ${timeConverter(
+			standardsInSystem().allClearTime
+		)}`
+		allClear.style.display = "block"
 	}
 
+	//Cleanup stats card when no drinks are in the system
 	if (standardsConsumed() == 0) {
-		activeStandards.innerText = "Start drinking to check your stats"
-		consumedStandards.innerText = ""
-		burnedStandards.innerText = ""
+		activeStandards.innerText = "Get started"
+		activeStandardsSubtitle.style.display = "none"
+		allClear.style.display = "none"
+		standardsCountdown.style.display = "none"
+		standardsCountdownSubtitle.style.display = "none"
 	}
 }
 
@@ -259,13 +284,18 @@ function drinkQueue() {
 	sortedArray.forEach((drink) => {
 		if (drink.completeDatetime != "" && earliestBurnStart == undefined) {
 			earliestBurnStart = drink.completeDatetime
+
 			drink.burnStartTime = earliestBurnStart
 			drink.predictedBurnTime = earliestBurnStart + drink.millisecondsToBurn
-			if (drink.burnStartTime < new Date().getTime()) {
-				drink.startedBurning = true
-			} else {
-				drink.startedBurning = false
-			}
+
+			// if (drink.burnStartTime < new Date().getTime()) {
+			// 	drink.startedBurning = true
+			// } else {
+			// 	drink.startedBurning = false
+			// }
+
+			drink.startedBurning = true
+
 			earliestBurnStart = drink.predictedBurnTime
 		} else if (drink.completeDatetime != "" && earliestBurnStart != undefined) {
 			drink.burnStartTime = earliestBurnStart
@@ -275,6 +305,7 @@ function drinkQueue() {
 			} else {
 				drink.startedBurning = false
 			}
+
 			earliestBurnStart = drink.predictedBurnTime
 		} else {
 			drink.burnStartTime = undefined
@@ -343,10 +374,23 @@ function alcoholRemaining(drink) {
 		secondsSinceCompleted / drink.secondsToBurn > 1
 			? 1
 			: secondsSinceCompleted / drink.secondsToBurn
-	const standardsRemaining =
-		drink.standards - drink.standards * percentBurned < 0
-			? 0
-			: drink.standards - drink.standards * percentBurned
+
+	let standardsRemaining
+	if (drink.standards - drink.standards * percentBurned < 0) {
+		standardsRemaining = 0
+	} else if (drink.startedBurning == true) {
+		standardsRemaining = drink.standards - drink.standards * percentBurned
+	} else if (drink.isDrunk == true) {
+		standardsRemaining = drink.standards
+	} else {
+		standardsRemaining = "error"
+	}
+
+	// =
+	// drink.standards - drink.standards * percentBurned < 0
+	// 	? 0
+	// 	: drink.standards - drink.standards * percentBurned
+
 	const burnedOff = standardsRemaining > 0 ? false : true
 
 	//Update the drink object
@@ -354,6 +398,8 @@ function alcoholRemaining(drink) {
 		//Need to set a value here so that renderDrink doesn't break
 		//Fix later
 		drink.percentBurned = 0
+		drink.standardsRemaining = standardsRemaining
+		drink.burnedOff = burnedOff
 	} else {
 		drink.standardsRemaining = 0
 		drink.standardsRemaining = standardsRemaining
@@ -426,11 +472,15 @@ function timeConverter(dateTime) {
 }
 
 //Simple function to run other functions that update the Drink objects and then save that data
+//FIX
+//This needs optimising, it's currently running multiple times per refresh
+//I thiink it's something to do with functions running on eventListener generation
 function updateData() {
 	drinkQueue()
 	drinks.forEach(alcoholRemaining)
 	saveDrinks()
 	loadDrinks()
+	console.log("Data updated")
 }
 
 //Simple function to run other functions that render the DOM
@@ -460,11 +510,16 @@ function standardsInSystem() {
 	completedAndUnburnedDrinks = drinks.filter(
 		(drink) => drink.isDrunk == true && drink.burnedOff == false
 	)
-	const output = completedDrinks.reduce((total, drink) => {
+	const output = completedAndUnburnedDrinks.reduce((total, drink) => {
 		return total + parseFloat(drink.standardsRemaining)
 	}, 0)
 
-	return { standardsInSystem: output.toFixed(2), zeroStandards: output * 10 }
+	return {
+		standardsInSystem: output.toFixed(2),
+		gramsInSystem: output * 10,
+		millisecondsTillAllClear: output * 60 * 60 * 1000,
+		allClearTime: new Date().getTime() + output * 60 * 60 * 1000
+	}
 }
 
 //Build a system to calculate the total number of standards consumed
@@ -479,3 +534,5 @@ function standardsConsumed() {
 //TODO
 //Build a queuing system to burn through drinks in order of consumption
 //Build out compact view of existing drinks
+
+console.log(drinks)
