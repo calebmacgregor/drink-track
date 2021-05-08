@@ -83,8 +83,16 @@ body {
 	font-size: 16px;
 }
 
+.stats-header {
+	padding-bottom: 1rem;
+}
+
 #all-clear {
 	padding-top: 1rem;
+	font-size: 12px;
+}
+
+#standards-consumed {
 	font-size: 12px;
 }
 

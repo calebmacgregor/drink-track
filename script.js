@@ -14,7 +14,7 @@ const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 let drinks = loadDrinks()
 drinks.forEach(renderDrink)
 updateData()
-renderStats()
+renderData()
 
 //Rerender the data every 20 seconds
 //This is a terrible idea
@@ -32,13 +32,122 @@ class Drink {
 		this.standards = standardsCalculator(volume, percentage)
 		this.logDatetime = new Date().getTime()
 		this.isDrunk = false
+		this.startedBurning = false
+		this.isBurned = false
 		this.burnedDatetime = ""
 		this.completeDatetime = ""
-		this.hoursToBurn = timeToBurn(this.standards).hours
-		this.minutesToBurn = timeToBurn(this.standards).minutes
-		this.secondsToBurn = timeToBurn(this.standards).seconds
-		this.millisecondsToBurn = timeToBurn(this.standards).milliseconds
+		this.timeToBurn = timeToBurn(this.standards)
 	}
+}
+
+function drinkQueue() {
+	//Create an array of drinks sorted from oldest started to newest started
+	const sortedArray = drinks.sort((a, b) => {
+		if (a.completeDatetime < b.completeDatetime) {
+			return -1
+		}
+		if (a.completeDatetime > b.completeDatetime) {
+			return 1
+		} else return 0
+	})
+
+	//Initiate a variable to store the current earliest time a drink can start to be burned
+	let earliestBurnStart
+
+	//Loop through every element in the array
+	sortedArray.forEach((drink) => {
+		if (
+			drink.isDrunk == true &&
+			drink.isBurned == false &&
+			earliestBurnStart == undefined
+		) {
+			earliestBurnStart = drink.completeDatetime
+
+			drink.burnStartDatetime = earliestBurnStart
+			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+
+			drink.startedBurning = true
+
+			earliestBurnStart = drink.predictedBurnDatetime
+		} else if (
+			drink.isDrunk == true &&
+			drink.isBurned == false &&
+			earliestBurnStart != undefined
+		) {
+			drink.burnStartDatetime = earliestBurnStart
+			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+			drink.burnStartDatetime < new Date().getTime()
+				? (drink.startedBurning = true)
+				: (drink.startedBurning = false)
+
+			earliestBurnStart = drink.predictedBurnDatetime
+		}
+	})
+	//Save the array
+	drinks = sortedArray
+}
+
+//Calculate the amount of time until a given drink is burned off
+function alcoholRemaining(drink) {
+	//Short circuit if the drink has not been completed
+	if (drink.isDrunk == false) return "Drink not completed"
+
+	const currentTime = new Date().getTime()
+	const timeSinceCompleted = currentTime - drink.completeDatetime
+	const timeTillBurned = currentTime + drink.timeToBurn
+
+	let percentBurned
+	if (timeSinceCompleted / drink.timeToBurn > 1) {
+		percentBurned = 1
+	} else {
+		percentBurned = timeSinceCompleted / drink.timeToBurn
+	}
+
+	let standardsRemaining
+	if (drink.standards - drink.standards * percentBurned < 0) {
+		//If there's less than 0% remaining on the drink, reset it to 0
+		standardsRemaining = 0
+	} else if (drink.startedBurning == true) {
+		//If the drink has started burning, calculate the standards remaining
+		standardsRemaining = drink.standards - drink.standards * percentBurned
+	} else if (drink.isDrunk == true) {
+		//If the drink hasn't started burning then set the standards
+		//equal to the standards calculated by standardsCalculator
+		standardsRemaining = drink.standards
+	} else {
+		//Coverall that will break things if we hit an exception
+		//I should probably handle errors properly
+		standardsRemaining = 900
+	}
+
+	const isBurned = standardsRemaining > 0 ? false : true
+
+	//Update the drink object
+	if (drink.startedBurning == false) {
+		//Need to set a value here so that renderDrink doesn't break
+		//Fix later
+		drink.percentBurned = 0
+		drink.standardsRemaining = standardsRemaining
+		drink.isBurned = isBurned
+	} else {
+		drink.standardsRemaining = 0
+		drink.standardsRemaining = standardsRemaining
+		drink.timeTillBurned = timeTillBurned
+		drink.percentBurned = percentBurned
+		drink.isBurned = isBurned
+	}
+}
+
+//Mark drinks as drunk
+function markDrunk(drinkElement) {
+	//Find the associated object in the array
+	const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
+	//Update the isDrunk attribute
+	drink.isDrunk = true
+	//Update the completeDateimt attribute
+	drink.completeDatetime = new Date().getTime()
+	updateData()
+	renderData()
 }
 
 //Event listener to trigger estimator card render
@@ -60,7 +169,7 @@ form.addEventListener("submit", (e) => {
 	const drink = new Drink(volume, percentage)
 	const addDrinkTitle = document.querySelector("#add-drink-title")
 	const standardsEstimatorStandardsSubtitle = document.querySelector(
-		"#standards-estimator-standards-subtitle"
+		"#standards-estimator-subtitle"
 	)
 
 	drinks.unshift(drink)
@@ -127,8 +236,6 @@ document.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
 	//Short circuit if the element clicked is not the button with the ID of mark-drunk
 	if (!e.target.matches("#mark-drunk")) return
-	//Prevent the default behaviour
-	e.preventDefault()
 
 	const addDrinkTitle = document.querySelector("#add-drink-title")
 
@@ -149,11 +256,11 @@ document.addEventListener("click", (e) => {
 //Render the estimator card
 function renderEstimator(volume, percentage) {
 	const standards = standardsCalculator(volume, percentage)
-	const hoursToBurn = timeToBurn(standards).hours
-	const minutesToBurn = timeToBurn(standards).minutes - hoursToBurn * 60
+	const hoursToBurn = Math.floor(timeToBurn(standards) / 1000 / 60 / 60)
+	const minutesToBurn = timeToBurn(standards) / 1000 / 60 - hoursToBurn * 60
 	const addDrinkTitle = document.querySelector("#add-drink-title")
 	const standardsEstimatorStandardsSubtitle = document.querySelector(
-		"#standards-estimator-standards-subtitle"
+		"#standards-estimator-subtitle"
 	)
 
 	if (volume && percentage) addDrinkTitle.classList.add("shrunk")
@@ -184,15 +291,15 @@ function renderStats() {
 		"#active-standards-subtitle"
 	)
 	const standardsCountdown = document.querySelector("#standards-countdown")
+	const standardsConsumedElement = document.querySelector("#standards-consumed")
 
 	const allClear = document.querySelector("#all-clear")
 
 	const hoursTillAllClear = Math.floor(
-		standardsInSystem().millisecondsTillAllClear / 1000 / 60 / 60
+		standardsInSystem().timeTillAllClear / 1000 / 60 / 60
 	)
 	const minutesTillAllClear = Math.floor(
-		standardsInSystem().millisecondsTillAllClear / 1000 / 60 -
-			hoursTillAllClear * 60
+		standardsInSystem().timeTillAllClear / 1000 / 60 - hoursTillAllClear * 60
 	)
 
 	if (standardsConsumed() != 0) {
@@ -203,6 +310,10 @@ function renderStats() {
 		//Set values and make items visible when drinks are in the system
 		activeStandardsSubtitle.innerText = "currently in your system"
 		activeStandardsSubtitle.style.display = "block"
+
+		//Not using this until I can make it look nicer
+		// standardsConsumedElement.innerText = `${standardsConsumed()}x standards consumed overall`
+		// standardsConsumedElement.style.display = "block"
 
 		if (hoursTillAllClear == 0) {
 			standardsCountdown.innerText = `${minutesTillAllClear} minutes\ntill zero standards`
@@ -223,6 +334,7 @@ function renderStats() {
 		activeStandardsSubtitle.style.display = "none"
 		allClear.style.display = "none"
 		standardsCountdown.style.display = "none"
+		standardsConsumedElement.style.display = "none"
 	}
 }
 
@@ -270,12 +382,12 @@ function renderDrink(drink) {
 		? `Drunk by ${timeConverter(drink.completeDatetime)}`
 		: ""
 
-	burnStartDatetime.innerText = drink.burnStartTime
-		? `Starts burning at ${timeConverter(drink.burnStartTime)}`
+	burnStartDatetime.innerText = drink.burnStartDatetime
+		? `Starts burning at ${timeConverter(drink.burnStartDatetime)}`
 		: ""
 
-	burnedDatetime.innerText = drink.predictedBurnTime
-		? `Burned by ${timeConverter(drink.predictedBurnTime)}`
+	burnedDatetime.innerText = drink.predictedBurnDatetime
+		? `Burned by ${timeConverter(drink.predictedBurnDatetime)}`
 		: ""
 
 	//Render the element to the DOM
@@ -284,52 +396,8 @@ function renderDrink(drink) {
 
 //Calculation functions
 
-function drinkQueue() {
-	//Create an array of drinks sorted from oldest started to newest started
-	const sortedArray = drinks.sort((a, b) => {
-		if (a.completeDatetime < b.completeDatetime) {
-			return -1
-		}
-		if (a.completeDatetime > b.completeDatetime) {
-			return 1
-		} else return 0
-	})
-
-	//Initiate a variable to store the current earliest time a drink can start to be burned
-	let earliestBurnStart
-
-	//Loop through every element in the array
-	sortedArray.forEach((drink) => {
-		if (drink.completeDatetime != "" && earliestBurnStart == undefined) {
-			earliestBurnStart = drink.completeDatetime
-
-			drink.burnStartTime = earliestBurnStart
-			drink.predictedBurnTime = earliestBurnStart + drink.millisecondsToBurn
-
-			drink.startedBurning = true
-
-			earliestBurnStart = drink.predictedBurnTime
-		} else if (drink.completeDatetime != "" && earliestBurnStart != undefined) {
-			drink.burnStartTime = earliestBurnStart
-			drink.predictedBurnTime = earliestBurnStart + drink.millisecondsToBurn
-			if (drink.burnStartTime < new Date().getTime()) {
-				drink.startedBurning = true
-			} else {
-				drink.startedBurning = false
-			}
-
-			earliestBurnStart = drink.predictedBurnTime
-		} else {
-			drink.burnStartTime = undefined
-			drink.startedBurning = false
-		}
-	})
-	//Save the array
-	drinks = sortedArray
-}
-
 //Calculate the number of standards in a drink
-function standardsCalculator(volume, percentage) {
+function standardsCalculator(volumeName, percentage) {
 	const drinkSizeMapping = [
 		{ name: "pint-570", volume: 570 },
 		{ name: "schooner-425", volume: 425 },
@@ -340,93 +408,17 @@ function standardsCalculator(volume, percentage) {
 		{ name: "shot-30", volume: 30 }
 	]
 
-	const volumeML = drinkSizeMapping.find((element) => element.name == volume)
+	const volume = drinkSizeMapping.find((element) => element.name == volumeName)
 		.volume
 
-	if (volume == "." || percentage == ".") return
+	if (percentage == ".") return
 	//Return the number of standards rounded to 1 decimal place
-	return ((volumeML / 1000) * percentage * 0.789).toFixed(1)
+	return ((volume / 1000) * percentage * 0.789).toFixed(1)
 }
 
 //Calculate the time taken to burn off the alcohol in a drink
-//This function needs adjusting to be more like the alcoholRemaining
-//Realistically they need to just be complementary - before and after style
 function timeToBurn(standards) {
-	const hours = Math.floor(standards)
-	//Multiply by 100 to round the fraction
-	//Divide by 100 to get back to a percentage
-	const hourFraction = Math.ceil((standards - hours) * 100) / 100
-	const minutes = 60 * hourFraction + hours * 60
-	const seconds = minutes * 60
-	const milliseconds = standards * 60 * 60 * 1000
-	//Return an object with the hours and minutes both rounded up
-	return {
-		hours: Math.ceil(hours),
-		minutes: Math.ceil(minutes),
-		seconds: Math.ceil(seconds),
-		milliseconds: Math.ceil(milliseconds)
-	}
-}
-
-//Calculate the amount of time until a given drink is burned off
-function alcoholRemaining(drink) {
-	//Short circuit if the drink has not been completed
-	if (drink.completeDatetime == "") return "Drink not completed"
-	const currentTime = new Date()
-	const millisecondsSinceCompleted = currentTime - drink.completeDatetime
-	const secondsSinceCompleted = millisecondsSinceCompleted / 1000
-	const secondsTillBurned = drink.secondsToBurn - secondsSinceCompleted
-	const minutesTillBurned = Math.ceil(secondsTillBurned / 60)
-	const hoursTillBurned = Math.floor(minutesTillBurned / 60)
-	const percentBurned =
-		secondsSinceCompleted / drink.secondsToBurn > 1
-			? 1
-			: secondsSinceCompleted / drink.secondsToBurn
-
-	let standardsRemaining
-
-	if (drink.standards - drink.standards * percentBurned < 0) {
-		//If there's less than 0% remaining on the drink, reset it to 0
-		standardsRemaining = 0
-	} else if (drink.startedBurning == true) {
-		//If the drink has started burning, calculate the standards remaining
-		standardsRemaining = drink.standards - drink.standards * percentBurned
-	} else if (drink.isDrunk == true) {
-		//If the drink hasn't started burning then set the standards
-		//equal to the standards calculated by standardsCalculator
-		standardsRemaining = drink.standards
-	} else {
-		//Coverall that will break things if we hit an exception
-		//I should probably handle errors properly
-		standardsRemaining = "error"
-	}
-
-	const burnedOff = standardsRemaining > 0 ? false : true
-
-	//Update the drink object
-	if (drink.startedBurning != true) {
-		//Need to set a value here so that renderDrink doesn't break
-		//Fix later
-		drink.percentBurned = 0
-		drink.standardsRemaining = standardsRemaining
-		drink.burnedOff = burnedOff
-	} else {
-		drink.standardsRemaining = 0
-		drink.standardsRemaining = standardsRemaining
-		drink.hoursTillBurned = hoursTillBurned
-		drink.minutesTillBurned = minutesTillBurned
-		drink.secondsTillBurned = secondsTillBurned
-		drink.percentBurned = percentBurned
-		drink.burnedOff = burnedOff
-	}
-
-	return {
-		percentBurned: percentBurned,
-		secondsTillBurned: secondsTillBurned,
-		minutesTillBurned: minutesTillBurned,
-		hoursTillBurned: hoursTillBurned,
-		standardsRemaining: standardsRemaining
-	}
+	return standards * 60 * 60 * 1000
 }
 
 //Data movement functions
@@ -448,36 +440,29 @@ function saveDrinks() {
 //Delete drinks from both the DOM and the array
 function deleteDrink(drinkElement) {
 	//Find the item in the array that corresponds with this drink-card
-	const arrayDrink = drinks.find(
-		(d) => d.drinkID == drinkElement.dataset.drinkId
-	)
+	const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
 	//Remove the drink-card element
 	drinkElement.remove()
-	//Update the array to not include the arrayDrink
-	drinks = drinks.filter((d) => d.drinkID != arrayDrink.drinkID)
-}
-
-//Mark drinks as drunk
-function markDrunk(drinkElement) {
-	//Find the associated object in the array
-	const arrayObject = drinks.find(
-		(d) => d.drinkID == drinkElement.dataset.drinkId
-	)
-	//Update the isDrunk attribute
-	arrayObject.isDrunk = true
-	//Update the completeDateimt attribute
-	arrayObject.completeDatetime = new Date().getTime()
-	updateData()
-	renderData()
+	//Update the array to not include the drink
+	drinks = drinks.filter((d) => d.drinkID != drink.drinkID)
 }
 
 //Utility/helper functions
 //Creates 12 hour time strings from datetime integers
 function timeConverter(dateTime) {
 	dateTime = new Date(dateTime)
-	return dateTime.toLocaleTimeString(["en-AU"], {
-		timeStyle: "short"
-	})
+
+	if (new Date().getDay() != dateTime.getDay()) {
+		return `${dateTime.toLocaleTimeString(["en-AU"], {
+			timeStyle: "short"
+		})} on ${dateTime.toLocaleDateString(["en-AU"], {
+			weekday: "long"
+		})}`
+	} else {
+		return dateTime.toLocaleTimeString(["en-AU"], {
+			timeStyle: "short"
+		})
+	}
 }
 
 //Simple function to run other functions that update the Drink objects and then save that data
@@ -485,8 +470,8 @@ function timeConverter(dateTime) {
 //This needs optimising, it's currently running multiple times per refresh
 //I thiink it's something to do with functions running on eventListener generation
 function updateData() {
-	drinkQueue()
 	drinks.forEach(alcoholRemaining)
+	drinkQueue()
 	saveDrinks()
 	loadDrinks()
 	console.log("Data updated")
@@ -502,17 +487,29 @@ function renderData() {
 //Build a system to calculate the amount of alcohol still in someone's system
 function standardsInSystem() {
 	completedAndUnburnedDrinks = drinks.filter(
-		(drink) => drink.isDrunk == true && drink.burnedOff == false
+		(drink) => drink.isDrunk == true && drink.isBurned == false
 	)
 	const output = completedAndUnburnedDrinks.reduce((total, drink) => {
 		return total + parseFloat(drink.standardsRemaining)
 	}, 0)
 
+	const drinkBurnTimes = drinks
+		.filter((drink) => drink.predictedBurnDatetime)
+		.map((drink) => drink.predictedBurnDatetime)
+
+	let latestBurnTime
+
+	if (drinkBurnTimes.length > 0) {
+		latestBurnTime = drinkBurnTimes.reduce((a, b) => Math.max(a, b))
+	} else {
+		latestBurnTime = new Date().getTime()
+	}
+
 	return {
 		standardsInSystem: output.toFixed(2),
 		gramsInSystem: output * 10,
-		millisecondsTillAllClear: output * 60 * 60 * 1000,
-		allClearTime: new Date().getTime() + output * 60 * 60 * 1000
+		timeTillAllClear: output * 60 * 60 * 1000,
+		allClearTime: latestBurnTime
 	}
 }
 
