@@ -7,14 +7,20 @@ const percentageInput = document.querySelector("#percentage-input")
 const standardsEstimatorStandards = document.querySelector(
 	"#standards-estimator-standards"
 )
+const acknowledgeDisclaimerButton = document.querySelector(
+	"#acknowledge-disclosure"
+)
 
 const LOCAL_STORAGE_PREFIX = "DRINK_TRACK"
 const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
+const PREFERENCES_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-preferences`
 
+let preferences = loadPreferences()
 let drinks = loadDrinks()
 drinks.forEach(renderDrink)
 updateData()
 renderData()
+renderAcknowledgeDisclaimer()
 
 //Rerender the data every 20 seconds
 //This is a terrible idea
@@ -22,6 +28,35 @@ renderData()
 setInterval(() => {
 	renderData()
 }, 20000)
+
+//Preferences-related event listeners and functions
+
+function renderAcknowledgeDisclaimer() {
+	loadPreferences()
+	const disclosureBlur = document.querySelector(".disclosure-blur")
+	const disclosureText = document.querySelector(".disclosure-text")
+	const daysSinceDisclosureAcknowledged = Math.floor(
+		(new Date().getTime() - preferences.disclosureAcknowledgedDatetime) /
+			1000 / //Seconds
+			60 / //Minutes
+			60 //Hours
+	)
+
+	if (
+		preferences.disclosureAcknowledged == true &&
+		daysSinceDisclosureAcknowledged < 7
+	) {
+		disclosureBlur.style.display = "none"
+		disclosureText.style.display = "none"
+	}
+	savePreferences()
+}
+
+acknowledgeDisclaimerButton.addEventListener("click", () => {
+	preferences.disclosureAcknowledged = true
+	preferences.disclosureAcknowledgedDatetime = new Date().getTime()
+	renderAcknowledgeDisclaimer()
+})
 
 //Create the drink class
 class Drink {
@@ -258,7 +293,9 @@ document.addEventListener("click", (e) => {
 function renderEstimator(volume, percentage) {
 	const standards = standardsCalculator(volume, percentage)
 	const hoursToBurn = Math.floor(timeToBurn(standards) / 1000 / 60 / 60)
-	const minutesToBurn = timeToBurn(standards) / 1000 / 60 - hoursToBurn * 60
+	const minutesToBurn = Math.floor(
+		timeToBurn(standards) / 1000 / 60 - hoursToBurn * 60
+	)
 	const addDrinkTitle = document.querySelector("#add-drink-title")
 	const standardsEstimatorStandardsSubtitle = document.querySelector(
 		"#standards-estimator-subtitle"
@@ -266,13 +303,17 @@ function renderEstimator(volume, percentage) {
 
 	if (volume && percentage) addDrinkTitle.classList.add("shrunk")
 
-	//Set a very small delay so that the title has time to animate
 	//Run this through an if statement so that it only slows down on the first render
 	function updateStandardsEstimator() {
 		standardsEstimatorStandards.innerText = `${standards}x Standards`
-		standardsEstimatorStandardsSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+		if (hoursToBurn > 0) {
+			standardsEstimatorStandardsSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+		} else {
+			standardsEstimatorStandardsSubtitle.innerText = `${minutesToBurn} minutes to burn`
+		}
 	}
 
+	//Set a very small delay so that the title has time to animate
 	if (!volume && !percentage) {
 		setTimeout(() => {
 			updateStandardsEstimator()
@@ -424,6 +465,15 @@ function timeToBurn(standards) {
 
 //Data movement functions
 
+function loadPreferences() {
+	const preferencesString = localStorage.getItem(PREFERENCES_STORAGE_KEY)
+	return JSON.parse(preferencesString) || {}
+}
+
+function savePreferences() {
+	localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(preferences))
+}
+
 //Grab items from the browser storage and add them to the todos array
 function loadDrinks() {
 	//Grab the string value from browser storage
@@ -528,4 +578,3 @@ function standardsConsumed() {
 //Fix all absolute positionining
 //Handle every standard iphone screen size
 //Replace pixel widths with relative widths
-console.log(drinks)
