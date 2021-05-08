@@ -34,8 +34,9 @@ class Drink {
 		this.isDrunk = false
 		this.startedBurning = false
 		this.isBurned = false
-		this.burnedDatetime = ""
 		this.completeDatetime = ""
+		this.burnStartDatetime = ""
+		this.burnedDatetime = ""
 		this.timeToBurn = timeToBurn(this.standards)
 	}
 }
@@ -527,3 +528,4 @@ function standardsConsumed() {
 //Fix all absolute positionining
 //Handle every standard iphone screen size
 //Replace pixel widths with relative widths
+console.log(drinks)
