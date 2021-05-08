@@ -1,5 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
 
+/* #5644c7 */
+* {
+	--background-colour: #4a3ba7;
+	--card-colour: #5644c7;
+	--accent-colour: #ee3fa4;
+	--font-colour: white;
+	--button-font-color: white;
+}
+
 /*  */
 /*  */
 /* Global styles */
@@ -26,7 +35,7 @@ p {
 }
 
 body {
-	background-color: #4a3ba7;
+	background-color: var(--background-colour);
 	padding-top: 3rem;
 	padding-bottom: 2rem;
 	display: flex;
@@ -50,8 +59,8 @@ body {
 .card {
 	display: flex;
 	flex-direction: column;
-	background-color: #5644c7;
-	color: white;
+	background-color: var(--card-colour);
+	color: var(--font-colour);
 	width: 307px;
 	border-radius: 5px;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
@@ -66,7 +75,7 @@ body {
 /*  */
 
 .stats-card {
-	color: white;
+	color: var(--font-colour);
 	width: 307px;
 	display: flex;
 	flex-direction: column;
@@ -99,7 +108,7 @@ body {
 span {
 	vertical-align: middle;
 	font-size: inherit;
-	color: #ee3fa4;
+	color: var(--accent-colour);
 }
 
 /*  */
@@ -112,8 +121,8 @@ span {
 	position: relative;
 	/* align-items: center; */
 	/* justify-content: center; */
-	color: #f8f8f2;
-	background-color: #5644c7;
+	color: var(--font-colour);
+	background-color: var(--card-colour);
 	height: 12rem;
 }
 
@@ -254,7 +263,7 @@ input::placeholder {
 	border-style: none;
 	height: 1rem;
 	border-radius: 15px;
-	background-color: #ee3fa4;
+	background-color: var(--accent-colour);
 }
 
 /*  */
@@ -264,14 +273,14 @@ input::placeholder {
 /*  */
 
 button {
-	background-color: #ee3fa4;
+	background-color: var(--accent-colour);
+	color: var(--button-font-color);
 	text-align: center;
 	width: 40%;
 	height: 40px;
 	font-size: 16px;
 	font-weight: bold;
 	border-radius: 5px;
-	color: white;
 	border-style: none;
 	cursor: pointer;
 	transition: ease 100ms;
