@@ -349,7 +349,16 @@ input::placeholder {
 }
 
 #another-round-button {
-	width: 10rem;
+	font-size: 14px;
+	width: 8rem;
+}
+
+#another-round-abv {
+	font-size: 12px;
+}
+
+#another-round-standards {
+	font-size: 16px;
 }
 
 /*  */
