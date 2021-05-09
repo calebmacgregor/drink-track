@@ -398,7 +398,7 @@ function anotherRound() {
 	} else {
 		anotherRoundContainer.style.display = "flex"
 		anotherRoundABV.innerText = `A ${lastDrinkName} of ${lastDrink.percentage}%`
-		anotherRoundStandards.innerText = `${lastDrink.standards} standards`
+		anotherRoundStandards.innerText = `${lastDrink.standards}x standards`
 	}
 
 	return { lastDrink: lastDrink, lastDrinkName: lastDrinkName }
