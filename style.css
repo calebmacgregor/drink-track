@@ -8,15 +8,17 @@
 	--font-colour: white;
 	--button-font-color: white;
 	--input-background: #f8f8f2;
+	--input-font-colour: black;
 }
 
 .light {
-	--background-colour: #f5fafd;
-	--card-colour: rgba(255, 255, 255, 0.25);
-	--accent-colour: #a178f3;
-	--font-colour: rgb(59, 59, 59);
-	--button-font-color: white;
-	--input-background: #d8d9f8;
+	--background-colour: #282c30;
+	--card-colour: hsl(210, 9%, 30%, 0.25);
+	--accent-colour: #cbe4e1;
+	--font-colour: #d1e2e1;
+	--button-font-color: black;
+	--input-background: #282c30;
+	--input-font-colour: hsl(0, 0%, 90%);
 }
 
 /*  */
@@ -252,11 +254,11 @@ select {
 	border-radius: 5px;
 	border-style: none;
 	font-weight: bold;
-	color: hsl(0, 4%, 0%);
+	color: var(--input-font-colour);
 }
 
 input::placeholder {
-	color: hsl(0, 4%, 0%);
+	color: var(--input-font-colour);
 	font-weight: bold;
 }
 
