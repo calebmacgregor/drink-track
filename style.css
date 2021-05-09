@@ -48,10 +48,12 @@ p {
 
 body {
 	background-color: var(--background-colour);
+	width: 100vw;
 	padding-top: 3rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	overflow-x: hidden;
 }
 
 .disclosure-container {

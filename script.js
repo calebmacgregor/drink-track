@@ -128,8 +128,21 @@ function drinkQueue() {
 			earliestBurnStart = drink.predictedBurnDatetime
 		}
 	})
+
+	//Sort drinks by complete time
+	//This is so that incomplete drinks show at the top
+	//And complete drinks are below that
+	//Makes for easier completing of drinks/seeing which drink is next to finish
+	const outputArray = sortedArray.sort((a, b) => {
+		if (a.completeDatetime < b.completeDatetime) {
+			return -1
+		}
+		if (a.completeDatetime > b.completeDatetime) {
+			return 1
+		} else return 0
+	})
 	//Save the array
-	drinks = sortedArray
+	drinks = outputArray
 }
 
 //Calculate the amount of time until a given drink is burned off
@@ -481,7 +494,9 @@ function renderDrink(drink) {
 	standards.innerText = `${drink.standards}x standards`
 
 	finishedDatetime.innerText = drink.completeDatetime
-		? `Drunk by ${timeConverter(drink.completeDatetime)}`
+		? `Finished in ${Math.floor(
+				(drink.completeDatetime - drink.logDatetime) / 1000 / 60
+		  )} minutes`
 		: ""
 
 	burnStartDatetime.innerText = drink.burnStartDatetime
@@ -489,7 +504,7 @@ function renderDrink(drink) {
 		: ""
 
 	burnedDatetime.innerText = drink.predictedBurnDatetime
-		? `Burned by ${timeConverter(drink.predictedBurnDatetime)}`
+		? `Burned off by ${timeConverter(drink.predictedBurnDatetime)}`
 		: ""
 
 	//Render the element to the DOM
