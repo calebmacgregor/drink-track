@@ -36,9 +36,9 @@ renderAcknowledgeDisclaimer()
 //Rerender the data every 20 seconds
 //This is a terrible idea
 //Absolutely need to implement a better solution than this
-setInterval(() => {
-	renderData()
-}, 20000)
+// setInterval(() => {
+// 	renderData()
+// }, 20000)
 
 //Preferences-related event listeners and functions
 
@@ -261,10 +261,14 @@ document.addEventListener("click", (e) => {
 function confirmDelete(e) {
 	if (!e.target.classList.contains("delete-confirm")) return
 	const DOMDrink = e.target.closest("#drink-card")
-	deleteDrink(DOMDrink)
 
-	updateData()
-	renderData()
+	e.target.closest('#drink-card').classList.add('deleted')
+
+	setTimeout(() => {		
+		deleteDrink(DOMDrink)
+		updateData()
+	}, 250);
+
 }
 
 //Add a delete-confirm drink class to the small delete button on initial click
@@ -295,10 +299,14 @@ document.addEventListener("click", (e) => {
 	if (!e.target.classList.contains("delete-drink")) return
 
 	const DOMDrink = e.target.closest("#drink-card")
-	deleteDrink(DOMDrink)
 
-	updateData()
-	renderData()
+	e.target.closest('#drink-card').classList.add('deleted')
+
+	setTimeout(() => {		
+		deleteDrink(DOMDrink)
+		updateData()
+	}, 250);
+
 })
 
 //Mark a drink as drunk when the drink button is clicked

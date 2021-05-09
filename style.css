@@ -284,6 +284,14 @@ input::placeholder {
 	height: 150px;
 }
 
+#drink-card.deleted {
+	transition: opacity 100ms ease, height 250ms ease, margin 250ms ease;
+	height: 0px;
+	opacity: 0%;
+	margin: 0;
+}
+
+
 #standards {
 	position: absolute;
 	width: 100%;
