@@ -285,7 +285,7 @@ input::placeholder {
 }
 
 #drink-card.deleted {
-	transition: opacity 100ms ease, height 250ms ease, margin 250ms ease;
+	transition: opacity 100ms ease, height 150ms ease, margin 150ms ease;
 	height: 0px;
 	opacity: 0%;
 	margin: 0;

@@ -267,8 +267,8 @@ function confirmDelete(e) {
 	setTimeout(() => {		
 		deleteDrink(DOMDrink)
 		updateData()
+		renderData()
 	}, 250);
-
 }
 
 //Add a delete-confirm drink class to the small delete button on initial click
@@ -305,7 +305,9 @@ document.addEventListener("click", (e) => {
 	setTimeout(() => {		
 		deleteDrink(DOMDrink)
 		updateData()
-	}, 250);
+		renderData()
+	}, 150);
+
 
 })
 
@@ -459,6 +461,8 @@ function renderStats() {
 		standardsCountdown.style.display = "none"
 		standardsConsumedElement.style.display = "none"
 	}
+
+	console.log('Stats')
 }
 
 //Render drink
