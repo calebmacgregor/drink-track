@@ -33,12 +33,12 @@ updateData()
 renderData()
 renderAcknowledgeDisclaimer()
 
-//Rerender the data every 20 seconds
-//This is a terrible idea
-//Absolutely need to implement a better solution than this
-// setInterval(() => {
-// 	renderData()
-// }, 20000)
+// Rerender the data every 20 seconds
+// This is a terrible idea
+// Absolutely need to implement a better solution than this
+setInterval(() => {
+	renderData()
+}, 20000)
 
 //Preferences-related event listeners and functions
 
@@ -262,13 +262,13 @@ function confirmDelete(e) {
 	if (!e.target.classList.contains("delete-confirm")) return
 	const DOMDrink = e.target.closest("#drink-card")
 
-	e.target.closest('#drink-card').classList.add('deleted')
+	e.target.closest("#drink-card").classList.add("deleted")
 
-	setTimeout(() => {		
+	setTimeout(() => {
 		deleteDrink(DOMDrink)
 		updateData()
 		renderData()
-	}, 250);
+	}, 250)
 }
 
 //Add a delete-confirm drink class to the small delete button on initial click
@@ -300,15 +300,13 @@ document.addEventListener("click", (e) => {
 
 	const DOMDrink = e.target.closest("#drink-card")
 
-	e.target.closest('#drink-card').classList.add('deleted')
+	e.target.closest("#drink-card").classList.add("deleted")
 
-	setTimeout(() => {		
+	setTimeout(() => {
 		deleteDrink(DOMDrink)
 		updateData()
 		renderData()
-	}, 150);
-
-
+	}, 150)
 })
 
 //Mark a drink as drunk when the drink button is clicked
@@ -462,7 +460,7 @@ function renderStats() {
 		standardsConsumedElement.style.display = "none"
 	}
 
-	console.log('Stats')
+	console.log("Stats")
 }
 
 //Render drink
@@ -505,11 +503,18 @@ function renderDrink(drink) {
 	//Render the number of standards
 	standards.innerText = `${drink.standards}x standards`
 
-	finishedDatetime.innerText = drink.completeDatetime
+	const minutesSinceStartedString =
+		Math.floor((new Date().getTime() - drink.logDatetime) / 1000 / 60) == 1
+			? "minute"
+			: "minutes"
+
+	finishedDatetime.innerText = drink.isDrunk
 		? `Finished in ${Math.floor(
 				(drink.completeDatetime - drink.logDatetime) / 1000 / 60
-		  )} minutes`
-		: ""
+		  )} ${minutesSinceStartedString}`
+		: `Started ${Math.floor(
+				(new Date().getTime() - drink.logDatetime) / 1000 / 60
+		  )} ${minutesSinceStartedString} ago`
 
 	burnStartDatetime.innerText = drink.burnStartDatetime
 		? `Starts burning at ${timeConverter(drink.burnStartDatetime)}`
@@ -594,7 +599,7 @@ function timeConverter(dateTime) {
 }
 
 //Simple function to run other functions that update the Drink objects and then save that data
-//FIX
+//FIXME
 //This needs optimising, it's currently running multiple times per refresh
 //I thiink it's something to do with functions running on eventListener generation
 function updateData() {
