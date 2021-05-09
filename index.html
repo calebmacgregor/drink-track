@@ -15,13 +15,21 @@
 		/>
 		<link rel="stylesheet" href="style.css" />
 		<link rel="manifest" href="manifest.json" />
+		<link
+			rel="shortcut icon"
+			type="image/png"
+			href="/icons/apple-icon-180.png"
+		/>
 
 		<link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
 		<script src="script.js" defer></script>
 		<title>Drink Track</title>
 	</head>
 
-	<body>
+	<!-- Colour themese -->
+
+	<body class="dracula">
+		<div class="theme-toggle"></div>
 		<div class="disclosure-container">
 			<div class="disclosure-text">
 				<h1>Disclosure</h1>
@@ -91,8 +99,16 @@
 					/>
 				</div>
 
-				<button id="submit-drink">Queue Drink</button>
+				<button id="submit-drink">Start Drink</button>
 			</form>
+		</div>
+
+		<div class="another-round-container card">
+			<div class="another-round-text">
+				<h5 id="another-round-abv"></h5>
+				<h3 id="another-round-standards"></h3>
+			</div>
+			<button id="another-round-button">Another round</button>
 		</div>
 
 		<div class="container" id="container">

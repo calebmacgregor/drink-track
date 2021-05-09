@@ -1,12 +1,22 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
 
 /* #5644c7 */
-* {
+.dracula {
 	--background-colour: #4a3ba7;
 	--card-colour: #5644c7;
 	--accent-colour: #ee3fa4;
 	--font-colour: white;
 	--button-font-color: white;
+	--input-background: #f8f8f2;
+}
+
+.light {
+	--background-colour: #f5fafd;
+	--card-colour: rgba(255, 255, 255, 0.25);
+	--accent-colour: #a178f3;
+	--font-colour: rgb(59, 59, 59);
+	--button-font-color: white;
+	--input-background: #d8d9f8;
 }
 
 /*  */
@@ -118,7 +128,7 @@ body {
 	flex-direction: column;
 	background-color: var(--card-colour);
 	color: var(--font-colour);
-	width: 307px;
+	width: 90%;
 	border-radius: 5px;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 	transition: ease 250ms;
@@ -133,7 +143,7 @@ body {
 
 .stats-card {
 	color: var(--font-colour);
-	width: 307px;
+	width: 90%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
@@ -192,9 +202,6 @@ span {
 }
 
 #add-drink-title {
-	/* position: absolute;
-	top: 10%;
-	left: 10%; */
 	margin-bottom: 0.2rem;
 	transition: ease 250ms;
 }
@@ -238,7 +245,7 @@ input::-webkit-inner-spin-button {
 
 input,
 select {
-	background-color: #f8f8f2;
+	background-color: var(--input-background);
 	padding: 0.5rem;
 	width: 40%;
 	margin-right: 0.5rem;
@@ -264,7 +271,7 @@ input::placeholder {
 /*  */
 /*  */
 
-.drink-card {
+#drink-card {
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -313,7 +320,7 @@ input::placeholder {
 	border-style: none;
 	height: 1rem;
 	border-radius: 15px;
-	background-color: #f8f8f2;
+	background-color: var(--input-background);
 }
 
 #progress::-webkit-progress-value {
@@ -321,6 +328,24 @@ input::placeholder {
 	height: 1rem;
 	border-radius: 15px;
 	background-color: var(--accent-colour);
+}
+
+/*  */
+/*  */
+/* Another round styling */
+/*  */
+/*  */
+
+.another-round-container {
+	display: none;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 5rem;
+}
+
+#another-round-button {
+	width: 10rem;
 }
 
 /*  */
@@ -345,8 +370,11 @@ button {
 
 #small-delete-drink {
 	position: absolute;
-	top: 5%;
-	right: 4%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 5px;
+	right: 5px;
 	border-radius: 50%;
 	width: 1.5rem;
 	height: 1.5rem;

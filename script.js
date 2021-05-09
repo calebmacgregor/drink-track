@@ -15,8 +15,19 @@ const LOCAL_STORAGE_PREFIX = "DRINK_TRACK"
 const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 const PREFERENCES_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-preferences`
 
+const drinkSizeMapping = [
+	{ name: "pint-570", volume: 570, shortName: "pint" },
+	{ name: "schooner-425", volume: 425, shortName: "schooner" },
+	{ name: "pot-285", volume: 285, shortName: "pot" },
+	{ name: "can-375", volume: 375, shortName: "can" },
+	{ name: "can-355", volume: 355, shortName: "can" },
+	{ name: "can-330", volume: 330, shortName: "can" },
+	{ name: "shot-30", volume: 30, shortName: "shot" }
+]
+
 let preferences = loadPreferences()
 let drinks = loadDrinks()
+
 drinks.forEach(renderDrink)
 updateData()
 renderData()
@@ -33,8 +44,7 @@ setInterval(() => {
 
 function renderAcknowledgeDisclaimer() {
 	loadPreferences()
-	const disclosureBlur = document.querySelector(".disclosure-blur")
-	const disclosureText = document.querySelector(".disclosure-text")
+	const disclosureContainer = document.querySelector(".disclosure-container")
 	const daysSinceDisclosureAcknowledged = Math.floor(
 		(new Date().getTime() - preferences.disclosureAcknowledgedDatetime) /
 			1000 / //Seconds
@@ -46,8 +56,7 @@ function renderAcknowledgeDisclaimer() {
 		preferences.disclosureAcknowledged == true &&
 		daysSinceDisclosureAcknowledged < 7
 	) {
-		disclosureBlur.style.display = "none"
-		disclosureText.style.display = "none"
+		disclosureContainer.style.display = "none"
 	}
 	savePreferences()
 }
@@ -79,10 +88,10 @@ class Drink {
 function drinkQueue() {
 	//Create an array of drinks sorted from oldest started to newest started
 	const sortedArray = drinks.sort((a, b) => {
-		if (a.completeDatetime < b.completeDatetime) {
+		if (a.logDatetime < b.logDatetime) {
 			return -1
 		}
-		if (a.completeDatetime > b.completeDatetime) {
+		if (a.logDatetime > b.logDatetime) {
 			return 1
 		} else return 0
 	})
@@ -97,7 +106,7 @@ function drinkQueue() {
 			drink.isBurned == false &&
 			earliestBurnStart == undefined
 		) {
-			earliestBurnStart = drink.completeDatetime
+			earliestBurnStart = drink.logDatetime
 
 			drink.burnStartDatetime = earliestBurnStart
 			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
@@ -126,17 +135,17 @@ function drinkQueue() {
 //Calculate the amount of time until a given drink is burned off
 function alcoholRemaining(drink) {
 	//Short circuit if the drink has not been completed
-	if (drink.isDrunk == false) return "Drink not completed"
+	// if (drink.isDrunk == false) return "Drink not completed"
 
 	const currentTime = new Date().getTime()
-	const timeSinceCompleted = currentTime - drink.completeDatetime
+	const timeSinceStarted = currentTime - drink.logDatetime
 	const timeTillBurned = currentTime + drink.timeToBurn
 
 	let percentBurned
-	if (timeSinceCompleted / drink.timeToBurn > 1) {
+	if (timeSinceStarted / drink.timeToBurn > 1) {
 		percentBurned = 1
 	} else {
-		percentBurned = timeSinceCompleted / drink.timeToBurn
+		percentBurned = timeSinceStarted / drink.timeToBurn
 	}
 
 	let standardsRemaining
@@ -221,6 +230,19 @@ form.addEventListener("submit", (e) => {
 	renderData()
 })
 
+//Event listener to add an 'another round' drink to the drinks storage array
+document.addEventListener("click", (e) => {
+	if (!e.target.matches("#another-round-button")) return
+
+	lastDrink = anotherRound().lastDrink
+	drink = new Drink(lastDrink.volume, lastDrink.percentage)
+
+	drinks.unshift(drink)
+
+	updateData()
+	renderData()
+})
+
 //Function to delete on confirm delete
 //Set as a named function so that it is removable
 function confirmDelete(e) {
@@ -258,8 +280,6 @@ document.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
 	//Short circuit if the element clicked is not the button with the ID of delete-drink
 	if (!e.target.classList.contains("delete-drink")) return
-	//Prevent the default submit behaviour of the button
-	e.preventDefault()
 
 	const DOMDrink = e.target.closest("#drink-card")
 	deleteDrink(DOMDrink)
@@ -321,6 +341,46 @@ function renderEstimator(volume, percentage) {
 	} else {
 		updateStandardsEstimator()
 	}
+}
+
+//Render the 'another round' card
+function anotherRound() {
+	const anotherRoundContainer = document.querySelector(
+		".another-round-container"
+	)
+	const anotherRoundABV = document.querySelector("#another-round-abv")
+	const anotherRoundStandards = document.querySelector(
+		"#another-round-standards"
+	)
+
+	if (drinks.length < 1) {
+		anotherRoundContainer.style.display = "none"
+		return
+	}
+
+	const drinkLogDatetimes = drinks.map((drink) => drink.logDatetime)
+	let lastDrinkLogDatetime
+	if (drinkLogDatetimes.length > 0) {
+		lastDrinkLogDatetime = drinkLogDatetimes.reduce((a, b) => Math.max(a, b))
+	} else {
+		lastDrinkLogDatetime = drinkLogDatetimes[0]
+	}
+	const lastDrink = drinks.find(
+		(drink) => drink.logDatetime == lastDrinkLogDatetime
+	)
+	const lastDrinkName = drinkSizeMapping.find(
+		(drink) => drink.name == lastDrink.volume
+	).shortName
+
+	if (drinks.length < 1) {
+		anotherRoundContainer.style.display = "none"
+	} else {
+		anotherRoundContainer.style.display = "flex"
+		anotherRoundABV.innerText = `A ${lastDrinkName} of ${lastDrink.percentage}%`
+		anotherRoundStandards.innerText = `${lastDrink.standards} standards`
+	}
+
+	return { lastDrink: lastDrink, lastDrinkName: lastDrinkName }
 }
 
 //Render the stats card
@@ -440,16 +500,6 @@ function renderDrink(drink) {
 
 //Calculate the number of standards in a drink
 function standardsCalculator(volumeName, percentage) {
-	const drinkSizeMapping = [
-		{ name: "pint-570", volume: 570 },
-		{ name: "schooner-425", volume: 425 },
-		{ name: "pot-285", volume: 285 },
-		{ name: "can-375", volume: 375 },
-		{ name: "can-355", volume: 355 },
-		{ name: "can-330", volume: 330 },
-		{ name: "shot-30", volume: 30 }
-	]
-
 	const volume = drinkSizeMapping.find((element) => element.name == volumeName)
 		.volume
 
@@ -525,12 +575,12 @@ function updateData() {
 	drinkQueue()
 	saveDrinks()
 	loadDrinks()
-	console.log("Data updated")
 }
 
 //Simple function to run other functions that render the DOM
 function renderData() {
 	container.innerHTML = ""
+	anotherRound()
 	drinks.forEach(renderDrink)
 	renderStats()
 }
