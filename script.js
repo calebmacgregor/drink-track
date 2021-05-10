@@ -279,6 +279,7 @@ form.addEventListener("submit", (e) => {
 
 //Event listener to add an 'another round' drink to the drinks storage array
 document.addEventListener("click", (e) => {
+	console.log("another round")
 	if (!e.target.matches("#another-round-button")) return
 
 	lastDrink = anotherRound().lastDrink
@@ -400,6 +401,7 @@ function renderEstimator(volume, percentage) {
 
 //Render the 'another round' card
 function anotherRound() {
+	console.log("running another round")
 	const anotherRoundContainer = document.querySelector(
 		".another-round-container"
 	)
