@@ -697,16 +697,33 @@ function disableSidePanel(e) {
 
 document.addEventListener("click", (e) => {
 	if (!e.target.matches("#logo-burger")) return
-
-	const sidePanel = document.querySelector("#side-panel")
-
-	document.removeEventListener("click", disableSidePanel)
-	sidePanel.classList.add("active")
-	document.addEventListener("click", disableSidePanel)
 })
 
-//TODO
-//Redesign drink card
-//Fix all absolute positionining
-//Handle every standard iphone screen size
-//Replace pixel widths with relative widths
+//FIXME
+//Technically works but there's probably something
+//more modern I can use than tbis structure
+const screenWidth = screen.width
+let touchStart
+document.addEventListener("touchstart", (e) => {
+	touchStart = e.touches[0].clientX
+})
+
+let touchEnd
+document.addEventListener("touchmove", (e) => {
+	// console.log(e.touches)
+	touchEnd = e.touches[0].clientX
+	handleMove(touchStart, touchEnd, screenWidth)
+})
+
+function handleMove(touchstart, touchEnd, screenWidth) {
+	const delta = touchEnd - touchstart
+
+	//If more than 25% of the screen was swiped, trigger
+	if (delta / screenWidth > 0.5) {
+		const sidePanel = document.querySelector("#side-panel")
+
+		document.removeEventListener("click", disableSidePanel)
+		sidePanel.classList.add("active")
+		document.addEventListener("click", disableSidePanel)
+	}
+}
