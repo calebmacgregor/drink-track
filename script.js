@@ -1,3 +1,8 @@
+window.onresize = function () {
+	document.body.height = window.innerHeight
+}
+window.onresize() // called to initially set the height.
+
 //Global variables
 const object = document.querySelector("#object-list")
 
