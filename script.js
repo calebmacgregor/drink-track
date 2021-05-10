@@ -688,15 +688,15 @@ function standardsConsumed() {
 }
 
 //Activate and deactive side panel
+//FIXME
+//Need to lock scrolling when side panel is active
 function disableSidePanel(e) {
 	if (e.target.classList.contains("nav")) return
 	const sidePanel = document.querySelector("#side-panel")
+	const body = document.querySelector("body")
 	sidePanel.classList.remove("active")
+	// body.style.overflow = 'visible'
 }
-
-document.addEventListener("click", (e) => {
-	if (!e.target.matches("#logo-burger")) return
-})
 
 //FIXME
 //Technically works but there's probably something

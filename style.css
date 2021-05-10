@@ -413,16 +413,17 @@ button:active {
 }
 
 #side-panel {
-	position: absolute;
+	position: fixed;
 	display: flex;
 	flex-direction: column;
 	top: 0px;
-	padding-top: 3rem;
+	padding-top: 2rem;
 	left: -60%;
 	width: 60%;
-	height: 110%;
+	height: 50%;
 	color: var(--font-colour);
 	background-color: var(--panel-colour);
+	border-bottom-right-radius: 5px;
 	z-index: 1000;
 	transition: 250ms ease;
 }
