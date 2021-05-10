@@ -480,3 +480,14 @@ button:active {
 .theme.selected-theme {
 	color: var(--accent-colour);
 }
+
+.side-panel-background {
+	position: absolute;
+	display: flex;
+	top: 0px;
+	bottom: 0px;
+	background-color: var(--panel-colour);
+	height: 120%;
+	width: 100%;
+	z-index: -1;
+}
