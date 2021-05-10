@@ -279,7 +279,6 @@ form.addEventListener("submit", (e) => {
 
 //Event listener to add an 'another round' drink to the drinks storage array
 document.addEventListener("click", (e) => {
-	console.log("another round")
 	if (!e.target.matches("#another-round-button")) return
 
 	lastDrink = anotherRound().lastDrink
@@ -401,7 +400,6 @@ function renderEstimator(volume, percentage) {
 
 //Render the 'another round' card
 function anotherRound() {
-	console.log("running another round")
 	const anotherRoundContainer = document.querySelector(
 		".another-round-container"
 	)
@@ -495,8 +493,6 @@ function renderStats() {
 		standardsCountdown.style.display = "none"
 		standardsConsumedElement.style.display = "none"
 	}
-
-	console.log("Stats")
 }
 
 //Render drink
@@ -713,7 +709,6 @@ document.addEventListener("touchstart", (e) => {
 
 let touchEnd
 document.addEventListener("touchmove", (e) => {
-	// console.log(e.touches)
 	touchEnd = e.touches[0].clientX
 	handleMove(touchStart, touchEnd, screenWidth)
 })
@@ -721,7 +716,7 @@ document.addEventListener("touchmove", (e) => {
 function handleMove(touchstart, touchEnd, screenWidth) {
 	const delta = touchEnd - touchstart
 
-	//If more than 25% of the screen was swiped, trigger
+	//If more than x% of the screen was swiped, trigger
 	if (delta / screenWidth > 0.5) {
 		const sidePanel = document.querySelector("#side-panel")
 

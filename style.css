@@ -416,11 +416,11 @@ button:active {
 	position: fixed;
 	display: flex;
 	flex-direction: column;
-	top: 0px;
+	bottom: 0px;
 	padding-top: 3rem;
 	left: -60%;
 	width: 60%;
-	height: 120%;
+	height: 100%;
 	color: var(--font-colour);
 	background-color: var(--panel-colour);
 	z-index: 1000;
