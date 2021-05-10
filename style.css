@@ -51,6 +51,7 @@ p {
 body {
 	background-color: var(--background-colour);
 	width: 100vw;
+	height: -webkit-fill-available;
 	padding-top: 3rem;
 	display: flex;
 	flex-direction: column;
