@@ -415,7 +415,7 @@ button:active {
 #side-panel {
 	position: fixed;
 	display: flex;
-	height: 120vh;
+	height: -webkit-fill-available;
 	flex-direction: column;
 	top: 0px;
 	padding-top: 3rem;
