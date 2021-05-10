@@ -435,7 +435,6 @@ button:active {
 	display: flex;
 	flex-direction: column;
 	top: 0px;
-	bottom: 0px;
 	height: 120%;
 	padding-top: 3rem;
 	left: -60%;
