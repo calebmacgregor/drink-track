@@ -67,6 +67,39 @@ acknowledgeDisclaimerButton.addEventListener("click", () => {
 	renderAcknowledgeDisclaimer()
 })
 
+//Theme functions
+function chooseTheme(themeName) {
+	loadPreferences()
+
+	preferences.themeName = themeName
+	savePreferences()
+	setTheme()
+}
+
+function setTheme() {
+	//Set dark as the default theme
+	const themeName = loadPreferences().themeName || "Dark"
+
+	//FIXME
+	const body = document.querySelector("body")
+	const lightTheme = document.querySelector("#Light")
+	lightTheme.classList.remove("selected-theme")
+	const darkTheme = document.querySelector("#Dark")
+	darkTheme.classList.remove("selected-theme")
+
+	const selectedTheme = document.querySelector(`#${themeName}`)
+	selectedTheme.classList.toggle("selected-theme")
+	body.className = themeName
+}
+
+document.addEventListener("click", (e) => {
+	if (!e.target.classList.contains("theme")) return
+
+	selectedItem = e.target.innerText
+	chooseTheme(selectedItem)
+	console.log(document.querySelector("body"))
+})
+
 //Create the drink class
 class Drink {
 	constructor(volume, percentage) {
@@ -654,6 +687,23 @@ function standardsConsumed() {
 	}, 0)
 	return output.toFixed(2)
 }
+
+//Activate and deactive side panel
+function disableSidePanel(e) {
+	if (e.target.classList.contains("nav")) return
+	const sidePanel = document.querySelector("#side-panel")
+	sidePanel.classList.remove("active")
+}
+
+document.addEventListener("click", (e) => {
+	if (!e.target.matches("#logo-burger")) return
+
+	const sidePanel = document.querySelector("#side-panel")
+
+	document.removeEventListener("click", disableSidePanel)
+	sidePanel.classList.add("active")
+	document.addEventListener("click", disableSidePanel)
+})
 
 //TODO
 //Redesign drink card
