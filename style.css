@@ -51,7 +51,6 @@ p {
 body {
 	background-color: var(--background-colour);
 	width: 100vw;
-	height: -webkit-fill-available;
 	padding-top: 3rem;
 	display: flex;
 	flex-direction: column;
@@ -416,9 +415,9 @@ button:active {
 #side-panel {
 	position: fixed;
 	display: flex;
-	height: -webkit-fill-available;
 	flex-direction: column;
 	top: 0px;
+	bottom: 0px;
 	padding-top: 3rem;
 	left: -60%;
 	width: 60%;
