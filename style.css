@@ -420,7 +420,7 @@ button:active {
 	padding-top: 3rem;
 	left: -60%;
 	width: 60%;
-	height: 120%;
+	height: 150%;
 	color: var(--font-colour);
 	background-color: var(--panel-colour);
 	z-index: 1000;
