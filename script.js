@@ -31,6 +31,7 @@ let drinks = loadDrinks()
 drinks.forEach(renderDrink)
 updateData()
 renderData()
+setTheme()
 renderAcknowledgeDisclaimer()
 
 // Rerender the data every 20 seconds
