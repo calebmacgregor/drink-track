@@ -57,14 +57,11 @@ body {
 	background-color: var(--background-colour);
 	width: 100vw;
 	min-height: 100%;
+	padding-top: 3rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	overflow-x: hidden;
-	padding-top: env(safe-area-inset-top);
-	padding-left: env(safe-area-inset-left);
-	padding-bottom: env(safe-area-inset-bottom);
-	padding-right: env(safe-area-inset-right);
 }
 
 .disclosure-container {
