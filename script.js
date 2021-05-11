@@ -729,3 +729,82 @@ function handleMove(touchstart, touchEnd, screenWidth) {
 		document.addEventListener("click", disableSidePanel)
 	}
 }
+
+//Generate stats at the end of a session based on all drinks
+function endSession() {
+	//Create an array comprised of each small drink name and the associated standards
+	const sessionStats = drinks.map((drink) => {
+		const shortName = drinkSizeMapping.find(
+			(mapping) => mapping.name == drink.volume
+		).shortName
+
+		return {
+			volume: drink.volume,
+			standards: parseFloat(drink.standards),
+			name: shortName
+		}
+	})
+
+	//Genuinely no idea how this works
+	//Research the reduce method more
+	const standardsPerDrinkName = Array.from(
+		sessionStats.reduce(
+			(m, { name, standards }) => m.set(name, (m.get(name) || 0) + standards),
+			new Map()
+		),
+		([name, standards]) => ({ name, standards })
+	)
+
+	//Create an array of the start time of all drinks
+	const drinkStartTimes = drinks.map((drink) => drink.logDatetime)
+
+	//Grab the start and end of the session
+	sessionStartTime = drinkStartTimes.reduce((a, b) => Math.min(a, b))
+	sessionEndTime = drinkStartTimes.reduce((a, b) => Math.max(a, b))
+
+	//Get overall session standards
+	const standardsInSession = standardsInSystem().standardsInSystem
+
+	//Grab the elements needed
+	const standardsContainer = document.querySelector(".session-standards")
+	const sessionStandards = standardsContainer.querySelector(
+		"#session-standards-total"
+	)
+	const sessionTimes = document.querySelector("#session-times")
+
+	const pintsContainer = document.querySelector(".pints-container")
+	const pintsValue = pintsContainer.querySelector(".pints-number")
+	const schoonersContainer = document.querySelector(".schooners-container")
+	const schoonersValue = schoonersContainer.querySelector(".schooners-number")
+	const cansContainer = document.querySelector(".cans-container")
+	const cansValue = cansContainer.querySelector(".cans-number")
+	const shotsContainer = document.querySelector(".shots-container")
+	const shotsValue = shotsContainer.querySelector(".shots-number")
+
+	standardsPerDrinkName.forEach((drink) => {
+		if (drink.name == "pint") {
+			pintsContainer.style.display = "flex"
+			pintsValue.innerText = `Pints: ${drink.standards}x standards`
+		} else if (drink.name == "schooner") {
+			schoonersContainer.style.display = "flex"
+			schoonersValue.innerText = `Schooners: ${drink.standards}x standards`
+		} else if (drink.name == "can") {
+			cansContainer.style.display = "flex"
+			cansValue.innerText = `Cans: ${drink.standards}x standards`
+		} else if (drink.name == "shot") {
+			shotsContainer.style.display = "flex"
+			shotsValue.innerText = `Shots: ${drink.standards}x standards`
+		}
+	})
+
+	sessionStandards.innerText = `${standardsInSession}x \nStandards`
+
+	sessionTimes.innerText = `between ${timeConverter(
+		sessionStartTime
+	)} and ${timeConverter(sessionEndTime)}`
+
+	return standardsPerDrinkName
+}
+
+console.log(drinks)
+endSession().forEach((i) => console.log(i))

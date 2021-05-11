@@ -503,3 +503,45 @@ button:active {
 .theme.selected-theme {
 	color: var(--accent-color);
 }
+
+.session-finish-container {
+	display: none;
+	position: fixed;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	top: 25%;
+	color: var(--font-color);
+	background-color: var(--panel-color);
+	padding: 2rem;
+	width: 90%;
+	height: auto;
+	border-radius: 5px;
+	z-index: 80;
+}
+
+.session-standards {
+	margin-bottom: 2rem;
+}
+
+.drink-types {
+	display: flex;
+	height: 50%;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: left;
+}
+
+.session-drinks-container {
+	display: none;
+	margin-bottom: 1rem;
+	font-weight: bold;
+	color: var(--accent-color);
+	align-items: left;
+	justify-content: space-between;
+	width: 100%;
+}
+
+#archive-confirm {
+	margin-top: 1rem;
+}
