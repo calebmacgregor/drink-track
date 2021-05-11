@@ -23,6 +23,17 @@
 	--input-font-colour: #050830;
 }
 
+.Synthwave {
+	--background-colour: #2b203a;
+	--panel-colour: #ffffff;
+	--card-colour: #ffffff;
+	--accent-colour: #f56b7d;
+	--font-colour: #050830;
+	--button-font-color: white;
+	--input-background: #b7b9c5;
+	--input-font-colour: #050830;
+}
+
 /*  */
 /*  */
 /* Global styles */
@@ -194,22 +205,32 @@ span {
 
 .input-card {
 	position: relative;
+	display: flex;
 	/* align-items: center; */
 	/* justify-content: center; */
 	color: var(--font-colour);
 	background-color: var(--card-colour);
-	height: 12rem;
+	min-height: 12.5rem;
+}
+
+.standards-estimator {
+	display: flex;
+	flex-direction: column;
+	align-items: left;
+	justify-content: center;
+	margin-left: 1rem;
+	margin-bottom: 2rem;
 }
 
 .standards-estimator-content {
 	display: flex;
 	flex-direction: column;
-	margin-left: 10%;
-	margin-top: 15px;
 	height: 90%;
 }
 
 #add-drink-title {
+	margin-top: 1rem;
+	margin-left: 1rem;
 	margin-bottom: 0.2rem;
 	transition: ease 250ms;
 }
@@ -223,24 +244,24 @@ span {
 }
 
 .form {
-	display: flex;
-	width: 100%;
 	position: absolute;
-	bottom: 5%;
+	bottom: 10px;
+	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
+	z-index: 70;
+}
+
+.inputs {
+	display: flex;
+	justify-content: space-evenly;
+	margin-bottom: 0.5rem;
 }
 
 .title,
 .standards-estimator {
 	width: 100%;
-}
-
-.inputs {
-	display: flex;
-	width: 100%;
-	justify-content: space-evenly;
 }
 
 select {
@@ -356,7 +377,7 @@ input::placeholder {
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
-	height: 6rem;
+	min-height: 4rem;
 	padding: 1rem;
 }
 

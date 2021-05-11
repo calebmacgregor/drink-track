@@ -460,6 +460,7 @@ function renderStats() {
 	)
 
 	if (standardsConsumed() != 0) {
+		activeStandards.style.fontSize = "36px"
 		activeStandards.innerText = `${
 			standardsInSystem().standardsInSystem
 		}x standards`
@@ -487,6 +488,7 @@ function renderStats() {
 
 	//Cleanup stats card when no drinks are in the system
 	if (standardsConsumed() == 0) {
+		activeStandards.style.fontSize = "48px"
 		activeStandards.innerText = "Get started"
 		activeStandardsSubtitle.style.display = "none"
 		allClear.style.display = "none"
