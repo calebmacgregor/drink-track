@@ -462,7 +462,7 @@ function renderStats() {
 	)
 
 	if (standardsConsumed() != 0) {
-		activeStandards.style.fontSize = "36px"
+		activeStandards.style.fontSize = "32px"
 		activeStandards.innerText = `${
 			standardsInSystem().standardsInSystem
 		}x standards`
