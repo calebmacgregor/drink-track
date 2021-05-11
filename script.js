@@ -14,6 +14,7 @@ const acknowledgeDisclaimerButton = document.querySelector(
 const LOCAL_STORAGE_PREFIX = "DRINK_TRACK"
 const DRINKS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-drinks`
 const PREFERENCES_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-preferences`
+const SESSION_ARCHIVE = `${LOCAL_STORAGE_PREFIX}-archive`
 
 const drinkSizeMapping = [
 	{ name: "pint-570", volume: 570, shortName: "pint" },
@@ -120,6 +121,8 @@ class Drink {
 		this.burnStartDatetime = ""
 		this.burnedDatetime = ""
 		this.timeToBurn = timeToBurn(this.standards)
+		this.archived = false
+		this.SessionID = undefined
 	}
 }
 
@@ -808,4 +811,42 @@ function endSession() {
 	return standardsPerDrinkName
 }
 
-console.log(drinks)
+function archiveDrinks(drinks) {
+	if (drinks.length == 0) return
+	//Create a session ID
+	sessionID = new Date().getTime()
+
+	//Set each drink's archived status to true
+	//And the sessionID to sessionID
+	drinks.forEach((drink) => {
+		drink.archived = true
+		drink.sessionID = sessionID
+	})
+
+	//Create a new archived drink object
+	const archivedDrinks = {
+		sessionID: sessionID,
+		drinks: drinks
+	}
+
+	//Load archived drinks array from storage
+	const sessionArchiveString = localStorage.getItem(SESSION_ARCHIVE)
+	const sessionArchive = JSON.parse(sessionArchiveString) || []
+
+	sessionArchive.push(archivedDrinks)
+
+	localStorage.setItem(SESSION_ARCHIVE, JSON.stringify(sessionArchive))
+
+	drinks.length = 0
+	const container = document.querySelector("#container")
+	container.innerHTML = ""
+	saveDrinks()
+
+	// saveDrinks()
+	// renderData()
+}
+
+document.addEventListener("click", (e) => {
+	if (!e.target.matches("#archive-drinks")) return
+	archiveDrinks(drinks)
+})

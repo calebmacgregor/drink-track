@@ -516,6 +516,18 @@ button:active {
 	color: var(--accent-color);
 }
 
+#archive-drinks {
+	margin-top: 1rem;
+	width: 70%;
+}
+
+.archive-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 3rem;
+}
+
 .session-finish-container {
 	display: none;
 	position: fixed;
@@ -552,8 +564,4 @@ button:active {
 	align-items: left;
 	justify-content: space-between;
 	width: 100%;
-}
-
-#archive-confirm {
-	margin-top: 1rem;
 }
