@@ -2,36 +2,39 @@
 
 /* #5644c7 */
 .Dark {
-	--background-colour: #4a3ba7;
-	--panel-colour: hsl(249, 48%, 30%);
-	--card-colour: #5644c7;
-	--accent-colour: #ee3fa4;
-	--font-colour: white;
+	--background-color: #4a3ba7;
+	--panel-color: hsl(249, 48%, 30%);
+	--card-color: #5644c7;
+	--accent-color: #ee3fa4;
+	--button-color: #ee3fa4;
+	--font-color: white;
 	--button-font-color: white;
 	--input-background: #f8f8f2;
-	--input-font-colour: black;
+	--input-font-color: black;
 }
 
 .Light {
-	--background-colour: #f1f3ff;
-	--panel-colour: #ffffff;
-	--card-colour: #ffffff;
-	--accent-colour: #f56b7d;
-	--font-colour: #050830;
+	--background-color: #f1f3ff;
+	--panel-color: #ffffff;
+	--card-color: #ffffff;
+	--accent-color: #f56b7d;
+	--button-color: #f56b7d;
+	--font-color: #050830;
 	--button-font-color: white;
 	--input-background: #b7b9c5;
-	--input-font-colour: #050830;
+	--input-font-color: #050830;
 }
 
 .Synthwave {
-	--background-colour: #2b203a;
-	--panel-colour: #ffffff;
-	--card-colour: #ffffff;
-	--accent-colour: #f56b7d;
-	--font-colour: #050830;
-	--button-font-color: white;
-	--input-background: #b7b9c5;
-	--input-font-colour: #050830;
+	--background-color: #2d0c5c;
+	--panel-color: #2c0c5c;
+	--card-color: hsl(340, 69%, 50%);
+	--accent-color: #ea467a;
+	--font-color: #02fef5;
+	--button-font-color: #fefefe;
+	--button-color: #2c0c5c;
+	--input-background: #39b8f3;
+	--input-font-color: #050830;
 }
 
 /*  */
@@ -60,7 +63,7 @@ p {
 }
 
 body {
-	background-color: var(--background-colour);
+	background-color: var(--background-color);
 	height: 100vh;
 	width: 100vw;
 	padding-top: 3rem;
@@ -100,8 +103,8 @@ body {
 	align-items: center;
 	justify-content: center;
 	padding: 1.5rem;
-	background-color: var(--card-colour);
-	color: var(--font-colour);
+	background-color: var(--card-color);
+	color: var(--font-color);
 	border-radius: 5px;
 	height: 90%;
 	width: 80%;
@@ -115,7 +118,7 @@ body {
 .disclosure-text a {
 	text-decoration: none;
 	font-size: 24px;
-	color: var(--accent-colour);
+	color: var(--font-color);
 	font-weight: bold;
 	padding-bottom: 1rem;
 }
@@ -145,8 +148,8 @@ body {
 .card {
 	display: flex;
 	flex-direction: column;
-	background-color: var(--card-colour);
-	color: var(--font-colour);
+	background-color: var(--card-color);
+	color: var(--font-color);
 	width: 80%;
 	border-radius: 5px;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
@@ -161,7 +164,7 @@ body {
 /*  */
 
 .stats-card {
-	color: var(--font-colour);
+	color: var(--font-color);
 	width: 80%;
 	display: flex;
 	flex-direction: column;
@@ -194,7 +197,7 @@ body {
 span {
 	vertical-align: middle;
 	font-size: inherit;
-	color: var(--accent-colour);
+	color: var(--accent-color);
 }
 
 /*  */
@@ -208,8 +211,8 @@ span {
 	display: flex;
 	/* align-items: center; */
 	/* justify-content: center; */
-	color: var(--font-colour);
-	background-color: var(--card-colour);
+	color: var(--font-color);
+	background-color: var(--card-color);
 	min-height: 12.5rem;
 }
 
@@ -281,11 +284,11 @@ select {
 	border-radius: 5px;
 	border-style: none;
 	font-weight: bold;
-	color: var(--input-font-colour);
+	color: var(--input-font-color);
 }
 
 input::placeholder {
-	color: var(--input-font-colour);
+	color: var(--input-font-color);
 	font-weight: bold;
 }
 
@@ -363,7 +366,7 @@ input::placeholder {
 	border-style: none;
 	height: 1rem;
 	border-radius: 15px;
-	background-color: var(--accent-colour);
+	background-color: var(--accent-color);
 }
 
 /*  */
@@ -401,7 +404,7 @@ input::placeholder {
 /*  */
 
 button {
-	background-color: var(--accent-colour);
+	background-color: var(--button-color);
 	color: var(--button-font-color);
 	text-align: center;
 	width: 40%;
@@ -445,8 +448,8 @@ button:active {
 	left: -60%;
 	width: 60%;
 	height: 100%;
-	color: var(--font-colour);
-	background-color: var(--panel-colour);
+	color: var(--font-color);
+	background-color: var(--panel-color);
 	border-bottom-right-radius: 5px;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 	z-index: 1000;
@@ -498,5 +501,5 @@ button:active {
 }
 
 .theme.selected-theme {
-	color: var(--accent-colour);
+	color: var(--accent-color);
 }
