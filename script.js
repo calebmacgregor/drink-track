@@ -87,8 +87,8 @@ function setTheme() {
 	lightTheme.classList.remove("selected-theme")
 	const darkTheme = document.querySelector("#Dark")
 	darkTheme.classList.remove("selected-theme")
-	const synthwaveTheme = document.querySelector("#Synthwave")
-	synthwaveTheme.classList.remove("selected-theme")
+	const BubblegumTheme = document.querySelector("#Bubblegum")
+	BubblegumTheme.classList.remove("selected-theme")
 
 	const selectedTheme = document.querySelector(`#${themeName}`)
 	selectedTheme.classList.toggle("selected-theme")

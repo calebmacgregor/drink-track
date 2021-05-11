@@ -25,15 +25,15 @@
 	--input-font-color: #050830;
 }
 
-.Synthwave {
-	--background-color: #2d0c5c;
+.Bubblegum {
+	--background-color: #8c1dff;
 	--panel-color: #2c0c5c;
-	--card-color: hsl(340, 69%, 50%);
-	--accent-color: #ea467a;
-	--font-color: #02fef5;
-	--button-font-color: #fefefe;
-	--button-color: #2c0c5c;
-	--input-background: #39b8f3;
+	--card-color: #ff2975;
+	--accent-color: #ffd317;
+	--font-color: white;
+	--button-font-color: white;
+	--button-color: #8d1dff;
+	--input-background: hsl(339, 99%, 80%);
 	--input-font-color: #050830;
 }
 
