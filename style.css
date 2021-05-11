@@ -37,6 +37,18 @@
 	--input-font-color: #050830;
 }
 
+.Mint {
+	--background-color: hsl(169, 61%, 60%);
+	--panel-color: hsl(169, 61%, 70%);
+	--card-color: hsl(169, 61%, 50%);
+	--accent-color: #fb6470;
+	--font-color: black;
+	--button-font-color: white;
+	--button-color: hsl(169, 61%, 30%);
+	--input-background: hsl(169, 61%, 45%);
+	--input-font-color: black;
+}
+
 /*  */
 /*  */
 /* Global styles */
@@ -465,7 +477,7 @@ button:active {
 	border-top-style: solid;
 	border-bottom-style: solid;
 	display: flex;
-	height: 10rem;
+	height: 15rem;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;

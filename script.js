@@ -89,6 +89,8 @@ function setTheme() {
 	darkTheme.classList.remove("selected-theme")
 	const BubblegumTheme = document.querySelector("#Bubblegum")
 	BubblegumTheme.classList.remove("selected-theme")
+	const mintTheme = document.querySelector("#Mint")
+	mintTheme.classList.remove("selected-theme")
 
 	const selectedTheme = document.querySelector(`#${themeName}`)
 	selectedTheme.classList.toggle("selected-theme")
@@ -807,4 +809,3 @@ function endSession() {
 }
 
 console.log(drinks)
-endSession().forEach((i) => console.log(i))
