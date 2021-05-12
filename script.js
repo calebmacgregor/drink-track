@@ -740,7 +740,7 @@ function handleMove(touchstart, touchEnd, screenWidth) {
 	const delta = touchEnd - touchstart
 
 	//If more than x% of the screen was swiped, trigger
-	if (delta / screenWidth > 0.5) {
+	if (delta / screenWidth > 0.3) {
 		const sidePanel = document.querySelector("#side-panel")
 
 		document.removeEventListener("click", disableSidePanel)
