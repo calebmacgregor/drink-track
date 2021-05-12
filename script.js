@@ -84,17 +84,25 @@ function setTheme() {
 
 	//FIXME
 	const body = document.querySelector("body")
+
 	const lightTheme = document.querySelector("#Light")
 	lightTheme.classList.remove("selected-theme")
+
 	const darkTheme = document.querySelector("#Dark")
 	darkTheme.classList.remove("selected-theme")
+
 	const BubblegumTheme = document.querySelector("#Bubblegum")
 	BubblegumTheme.classList.remove("selected-theme")
+
 	const mintTheme = document.querySelector("#Mint")
 	mintTheme.classList.remove("selected-theme")
 
+	const heartbreakerTheme = document.querySelector("#Heartbreaker")
+	heartbreakerTheme.classList.remove("selected-theme")
+
 	const selectedTheme = document.querySelector(`#${themeName}`)
 	selectedTheme.classList.toggle("selected-theme")
+
 	body.className = themeName
 }
 
