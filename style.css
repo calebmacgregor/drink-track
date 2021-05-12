@@ -50,15 +50,15 @@
 }
 
 .Heartbreaker {
-	--background-color: #190004;
+	--background-color: rgb(22, 0, 0);
 	--panel-color: #220006;
-	--card-color: #3f0309;
-	--accent-color: #fcfffb;
+	--card-color: hsl(353, 100%, 40%);
+	--accent-color: #fcc060;
 	--font-color: white;
 	--button-font-color: white;
-	--button-color: #ff011d;
-	--input-background: hsl(353, 100%, 60%);
-	--input-font-color: black;
+	--button-color: hsl(353, 100%, 50%);
+	--input-background: hsl(353, 100%, 50%);
+	--input-font-color: white;
 }
 
 /*  */
