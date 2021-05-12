@@ -100,6 +100,9 @@ function setTheme() {
 	const heartbreakerTheme = document.querySelector("#Heartbreaker")
 	heartbreakerTheme.classList.remove("selected-theme")
 
+	const fortressTheme = document.querySelector("#Fortress")
+	fortressTheme.classList.remove("selected-theme")
+
 	const selectedTheme = document.querySelector(`#${themeName}`)
 	selectedTheme.classList.toggle("selected-theme")
 
