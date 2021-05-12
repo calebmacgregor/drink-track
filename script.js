@@ -20,9 +20,12 @@ const drinkSizeMapping = [
 	{ name: "pint-570", volume: 570, shortName: "pint" },
 	{ name: "schooner-425", volume: 425, shortName: "schooner" },
 	{ name: "pot-285", volume: 285, shortName: "pot" },
+	{ name: "can-440", volume: 440, shortName: "can" },
 	{ name: "can-375", volume: 375, shortName: "can" },
 	{ name: "can-355", volume: 355, shortName: "can" },
 	{ name: "can-330", volume: 330, shortName: "can" },
+	{ name: "glass-250", volume: 250, shortName: "glass" },
+	{ name: "glass-150", volume: 150, shortName: "glass" },
 	{ name: "shot-30", volume: 30, shortName: "shot" }
 ]
 
