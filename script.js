@@ -156,11 +156,7 @@ function drinkQueue() {
 
 	//Loop through every element in the array
 	sortedArray.forEach((drink) => {
-		if (
-			drink.isDrunk == true &&
-			drink.isBurned == false &&
-			earliestBurnStart == undefined
-		) {
+		if (drink.isDrunk == true && earliestBurnStart == undefined) {
 			earliestBurnStart = drink.logDatetime
 
 			drink.burnStartDatetime = earliestBurnStart
@@ -169,11 +165,14 @@ function drinkQueue() {
 			drink.startedBurning = true
 
 			earliestBurnStart = drink.predictedBurnDatetime
-		} else if (
-			drink.isDrunk == true &&
-			drink.isBurned == false &&
-			earliestBurnStart != undefined
-		) {
+		} else if (drink.isDrunk == true && earliestBurnStart < drink.logDatetime) {
+			earliestBurnStart = drink.logDatetime
+
+			drink.burnStartDatetime = earliestBurnStart
+			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+			drink.startedBurning = true
+			earliestBurnStart = drink.predictedBurnDatetime
+		} else if (drink.isDrunk == true && earliestBurnStart != undefined) {
 			drink.burnStartDatetime = earliestBurnStart
 			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
 			drink.burnStartDatetime < new Date().getTime()
@@ -206,8 +205,8 @@ function alcoholRemaining(drink) {
 	// if (drink.isDrunk == false) return "Drink not completed"
 
 	const currentTime = new Date().getTime()
-	const timeSinceStarted = currentTime - drink.logDatetime
-	const timeTillBurned = currentTime + drink.timeToBurn
+	const timeSinceStarted = currentTime - drink.burnStartDatetime
+	const timeTillBurned = drink.predictedBurnDatetime - currentTime
 
 	let percentBurned
 	if (timeSinceStarted / drink.timeToBurn > 1) {
@@ -234,6 +233,8 @@ function alcoholRemaining(drink) {
 	}
 
 	const isBurned = standardsRemaining > 0 ? false : true
+	const burnedDatetime =
+		standardsRemaining > 0 ? undefined : drink.predictedBurnDatetime
 
 	//Update the drink object
 	if (drink.startedBurning == false) {
@@ -242,12 +243,13 @@ function alcoholRemaining(drink) {
 		drink.percentBurned = 0
 		drink.standardsRemaining = standardsRemaining
 		drink.isBurned = isBurned
+		drink.burnedDatetime = burnedDatetime
 	} else {
-		drink.standardsRemaining = 0
 		drink.standardsRemaining = standardsRemaining
 		drink.timeTillBurned = timeTillBurned
 		drink.percentBurned = percentBurned
 		drink.isBurned = isBurned
+		drink.burnedDatetime = burnedDatetime
 	}
 }
 
@@ -864,3 +866,5 @@ document.addEventListener("click", (e) => {
 	if (!e.target.matches("#archive-drinks")) return
 	archiveDrinks(drinks)
 })
+
+console.log(drinks)
