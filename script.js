@@ -134,9 +134,10 @@ class Drink {
 		this.completeDatetime = ""
 		this.burnStartDatetime = ""
 		this.burnedDatetime = ""
+		this.predictedBurnDatetime = ""
 		this.timeToBurn = timeToBurn(this.standards)
 		this.archived = false
-		this.SessionID = undefined
+		this.sessionID = undefined
 	}
 }
 
@@ -188,10 +189,10 @@ function drinkQueue() {
 	//And complete drinks are below that
 	//Makes for easier completing of drinks/seeing which drink is next to finish
 	const outputArray = sortedArray.sort((a, b) => {
-		if (a.completeDatetime < b.completeDatetime) {
+		if (a.predictedBurnDatetime < b.predictedBurnDatetime) {
 			return -1
 		}
-		if (a.completeDatetime > b.completeDatetime) {
+		if (a.predictedBurnDatetime > b.predictedBurnDatetime) {
 			return 1
 		} else return 0
 	})
@@ -866,3 +867,5 @@ document.addEventListener("click", (e) => {
 	if (!e.target.matches("#archive-drinks")) return
 	archiveDrinks(drinks)
 })
+
+console.log(drinks)
