@@ -516,7 +516,7 @@ button:active {
 	border-top-style: solid;
 	border-bottom-style: solid;
 	display: flex;
-	height: 20rem;
+	height: 25rem;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
