@@ -106,6 +106,9 @@ function setTheme() {
 	const fortressTheme = document.querySelector("#Fortress")
 	fortressTheme.classList.remove("selected-theme")
 
+	const chuckleTheme = document.querySelector("#Chuckle")
+	chuckleTheme.classList.remove("selected-theme")
+
 	const selectedTheme = document.querySelector(`#${themeName}`)
 	selectedTheme.classList.toggle("selected-theme")
 
