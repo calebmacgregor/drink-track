@@ -36,7 +36,6 @@ drinks.forEach(renderDrink)
 updateData()
 renderData()
 setTheme()
-renderAcknowledgeDisclaimer()
 
 // Rerender the data every 20 seconds
 // This is a terrible idea
@@ -45,32 +44,7 @@ setInterval(() => {
 	renderData()
 }, 20000)
 
-//Preferences-related event listeners and functions
 
-function renderAcknowledgeDisclaimer() {
-	loadPreferences()
-	const disclosureContainer = document.querySelector(".disclosure-container")
-	const daysSinceDisclosureAcknowledged = Math.floor(
-		(new Date().getTime() - preferences.disclosureAcknowledgedDatetime) /
-			1000 / //Seconds
-			60 / //Minutes
-			60 //Hours
-	)
-
-	if (
-		preferences.disclosureAcknowledged == true &&
-		daysSinceDisclosureAcknowledged < 7
-	) {
-		disclosureContainer.style.display = "none"
-	}
-	savePreferences()
-}
-
-acknowledgeDisclaimerButton.addEventListener("click", () => {
-	preferences.disclosureAcknowledged = true
-	preferences.disclosureAcknowledgedDatetime = new Date().getTime()
-	renderAcknowledgeDisclaimer()
-})
 
 //Theme functions
 function chooseTheme(themeName) {
@@ -100,8 +74,8 @@ function setTheme() {
 	const mintTheme = document.querySelector("#Mint")
 	mintTheme.classList.remove("selected-theme")
 
-	const heartbreakerTheme = document.querySelector("#Heartbreaker")
-	heartbreakerTheme.classList.remove("selected-theme")
+	// const heartbreakerTheme = document.querySelector("#Heartbreaker")
+	// heartbreakerTheme.classList.remove("selected-theme")
 
 	const fortressTheme = document.querySelector("#Fortress")
 	fortressTheme.classList.remove("selected-theme")

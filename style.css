@@ -49,7 +49,7 @@
 	--input-font-color: black;
 }
 
-.Heartbreaker {
+/* .Heartbreaker {
 	--background-color: rgb(22, 0, 0);
 	--panel-color: hsl(0, 100%, 5%);
 	--card-color: hsl(353, 100%, 40%);
@@ -59,7 +59,7 @@
 	--button-color: hsl(353, 100%, 50%);
 	--input-background: hsl(353, 100%, 50%);
 	--input-font-color: white;
-}
+} */
 
 .Fortress {
 	--background-color: #1b2236;
@@ -74,14 +74,14 @@
 }
 
 .Chuckle {
-	--background-color: #3a6632;
+	--background-color: hsl(111, 34%, 30%);
 	--panel-color: hsl(111, 34%, 25%);
-	--card-color: hsl(8, 68%, 52%);
-	--accent-color: #f2c13a;
+	--card-color:  hsl(111, 34%, 20%);
+	--accent-color: hsl(8, 68%, 52%);
 	--font-color: white;
 	--button-font-color: white;
 	--button-color: #3a6632;
-	--input-background: hsl(8, 68%, 70%);
+	--input-background:  hsl(111, 34%, 50%);;
 	--input-font-color: black;
 }
 
