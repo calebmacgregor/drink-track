@@ -1,172 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, user-scalable = no, viewport-fit=cover"
-		/>
-		<meta name="theme-color" content="#000000" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta
-			name="apple-mobile-web-app-status-bar-style"
-			content="black-translucent"
-		/>
-		<link rel="stylesheet" href="style.css" />
-		<link rel="manifest" href="manifest.json" />
-		<link
-			rel="shortcut icon"
-			type="image/png"
-			href="/icons/apple-icon-180.png"
-		/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable = no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta
+      name="description"
+      content="Find out how many standards you're drinking, and when they'll be out of your system. Totally offline, completely private"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/icons/apple-icon-180.png"
+    />
 
-		<link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
-		<script src="script.js" defer></script>
-		<title>Standards</title>
-	</head>
+    <link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
+    <script src="script.js" defer></script>
+    <title>Keep track of how many standards you're drinking</title>
+  </head>
 
-	<!-- Colour themes -->
+  <!-- Colour themes -->
 
-	<body class="Dark">
-		<!-- Unused at this stage, this is for session stats -->
-		<div class="session-finish-container">
-			<div class="session-standards">
-				<h1 id="session-standards-total">28.6x Standards</h1>
-				<p id="session-times">between 8pm and 2am</p>
-			</div>
-			<div class="drink-types">
-				<div class="pints-container session-drinks-container">
-					<p class="pints-number">3 Pints</p>
-				</div>
-				<div class="schooners-container session-drinks-container">
-					<p class="schooners-number">3 Schooners</p>
-				</div>
-				<div class="cans-container session-drinks-container">
-					<p class="cans-number">3 Cans</p>
-				</div>
-				<div class="shots-container session-drinks-container">
-					<p class="shots-number">3 Shots</p>
-				</div>
-			</div>
-			<button id="archive-confirm">Archive</button>
-		</div>
-		<div class="side-panel nav" id="side-panel">
-			<div class="logo-container nav">
-				<img src="waves.svg" alt="waves logo" id="logo" class="nav" />
-			</div>
-			<div class="theme-container nav">
-				<h2 class="nav">Themes</h2>
-				<h3 class="theme nav" id="Dark">Dark</h3>
-				<h3 class="theme nav" id="Light">Light</h3>
-				<h3 class="theme nav" id="Bubblegum">Bubblegum</h3>
-				<h3 class="theme nav" id="Mint">Mint</h3>
-				<!-- <h3 class="theme nav" id="Heartbreaker">Heartbreaker</h3> -->
-				<h3 class="theme nav" id="Fortress">Fortress</h3>
-				<h3 class="theme nav" id="Chuckle">Chuckle</h3>
-			</div>
-			<div class="archive-button">
-				<button id="archive-drinks" class="nav">End Session</button>
-			</div>
-		</div>
+  <body class="Dark">
+    <!-- Unused at this stage, this is for session stats -->
+    <div class="session-finish-container">
+      <div class="session-standards">
+        <h1 id="session-standards-total">28.6x Standards</h1>
+        <p id="session-times">between 8pm and 2am</p>
+      </div>
+      <div class="drink-types">
+        <div class="pints-container session-drinks-container">
+          <p class="pints-number">3 Pints</p>
+        </div>
+        <div class="schooners-container session-drinks-container">
+          <p class="schooners-number">3 Schooners</p>
+        </div>
+        <div class="cans-container session-drinks-container">
+          <p class="cans-number">3 Cans</p>
+        </div>
+        <div class="shots-container session-drinks-container">
+          <p class="shots-number">3 Shots</p>
+        </div>
+      </div>
+      <button id="archive-confirm">Archive</button>
+    </div>
+    <div class="side-panel nav" id="side-panel">
+      <div class="logo-container nav">
+        <img src="waves.svg" alt="waves logo" id="logo" class="nav" />
+      </div>
+      <div class="theme-container nav">
+        <h2 class="nav">Themes</h2>
+        <h3 class="theme nav" id="Dark">Dark</h3>
+        <h3 class="theme nav" id="Light">Light</h3>
+        <h3 class="theme nav" id="Bubblegum">Bubblegum</h3>
+        <h3 class="theme nav" id="Mint">Mint</h3>
+        <!-- <h3 class="theme nav" id="Heartbreaker">Heartbreaker</h3> -->
+        <h3 class="theme nav" id="Fortress">Fortress</h3>
+        <h3 class="theme nav" id="Chuckle">Chuckle</h3>
+      </div>
+      <div class="archive-button">
+        <button id="archive-drinks" class="nav">End Session</button>
+      </div>
+    </div>
 
-		<div id="stats-card" class="stats-card">
-			<div class="stats-header">
-				<h1 id="active-standards"></h1>
-				<h4 id="active-standards-subtitle"></h4>
-				<p id="standards-consumed"></p>
-			</div>
-			<div class="stats-countdown-content">
-				<h4 id="standards-countdown"></h4>
-				<p id="all-clear"></p>
-			</div>
-		</div>
+    <div id="stats-card" class="stats-card">
+      <div class="stats-header">
+        <h1 id="active-standards"></h1>
+        <h4 id="active-standards-subtitle"></h4>
+        <p id="standards-consumed"></p>
+      </div>
+      <div class="stats-countdown-content">
+        <h4 id="standards-countdown"></h4>
+        <p id="all-clear"></p>
+      </div>
+    </div>
 
-		<div class="input-card card" id="input-card">
-			<div class="standards-estimator-content">
-				<div class="title" id="title">
-					<h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
-				</div>
-				<div class="standards-estimator" id="standards-estimator">
-					<h2 id="standards-estimator-standards"></h2>
-					<h4 id="standards-estimator-subtitle"></h4>
-				</div>
-			</div>
-			<form class="form" id="form">
-				<div class="inputs">
-					<label for="volume"></label>
-					<select name="volume" id="volume-input">
-						<option value="" selected disabled id="default-select">Size</option>
-						<option value="pint-570">Pint (570ml)</option>
-						<option value="schooner-425">Schooner (425ml)</option>
-						<option value="pot-285">Pot (285ml)</option>
-						<option value="can-440">Can (440ml)</option>
-						<option value="can-375">Can (375ml)</option>
-						<option value="can-355">Can (355ml)</option>
-						<option value="can-330">Can (330ml)</option>
-						<option value="glass-250">Glass (250ml)</option>
-						<option value="glass-150">Glass (150ml)</option>
-						<option value="shot-30">Shot (30ml)</option>
-					</select>
+    <div class="input-card card" id="input-card">
+      <div class="standards-estimator-content">
+        <div class="title" id="title">
+          <h1 id="add-drink-title" class="add-drink-title">Add a drink</h1>
+        </div>
+        <div class="standards-estimator" id="standards-estimator">
+          <h2 id="standards-estimator-standards"></h2>
+          <h4 id="standards-estimator-subtitle"></h4>
+        </div>
+      </div>
+      <form class="form" id="form">
+        <div class="inputs">
+          <label for="volume"></label>
+          <select name="volume" id="volume-input">
+            <option value="" selected disabled id="default-select">Size</option>
+            <option value="pint-570">Pint (570ml)</option>
+            <option value="schooner-425">Schooner (425ml)</option>
+            <option value="pot-285">Pot (285ml)</option>
+            <option value="can-440">Can (440ml)</option>
+            <option value="can-375">Can (375ml)</option>
+            <option value="can-355">Can (355ml)</option>
+            <option value="can-330">Can (330ml)</option>
+            <option value="glass-250">Glass (250ml)</option>
+            <option value="glass-150">Glass (150ml)</option>
+            <option value="shot-30">Shot (30ml)</option>
+          </select>
 
-					<label for="percentage"></label>
-					<input
-						type="float"
-						inputmode="decimal"
-						class="percentage-input"
-						id="percentage-input"
-						name="percentage"
-						placeholder="Percentage"
-					/>
-				</div>
+          <label for="percentage"></label>
+          <input
+            type="float"
+            inputmode="decimal"
+            class="percentage-input"
+            id="percentage-input"
+            name="percentage"
+            placeholder="Percentage"
+          />
+        </div>
 
-				<button id="submit-drink">Start Drink</button>
-			</form>
-		</div>
+        <button id="submit-drink">Start Drink</button>
+      </form>
+    </div>
 
-		<div class="another-round-container card">
-			<div class="another-round-text">
-				<h5 id="another-round-abv"></h5>
-				<h3 id="another-round-standards"></h3>
-			</div>
-			<button id="another-round-button">Another round</button>
-		</div>
+    <div class="another-round-container card">
+      <div class="another-round-text">
+        <h5 id="another-round-abv"></h5>
+        <h3 id="another-round-standards"></h3>
+      </div>
+      <button id="another-round-button">Another round</button>
+    </div>
 
-		<div class="container" id="container">
-			<ul id="object-list"></ul>
-		</div>
+    <div class="container" id="container">
+      <ul id="object-list"></ul>
+    </div>
 
-		<template id="drink-template">
-			<div class="drink-card card" id="drink-card">
-				<button id="small-delete-drink">X</button>
-				<h2 id="standards" class="standards"></h2>
-				<div class="times">
-					<p id="finished-datetime"></p>
-					<p id="burn_start-datetime"></p>
-					<p id="burned-datetime"></p>
-				</div>
-				<div class="buttons">
-					<button id="mark-drunk">Finish Drink</button>
-					<button id="delete-drink" class="delete-drink">Delete Drink</button>
-				</div>
-				<progress id="progress" value="=0"></progress>
-			</div>
-		</template>
+    <template id="drink-template">
+      <div class="drink-card card" id="drink-card">
+        <button id="small-delete-drink">X</button>
+        <h2 id="standards" class="standards"></h2>
+        <div class="times">
+          <p id="finished-datetime"></p>
+          <p id="burn_start-datetime"></p>
+          <p id="burned-datetime"></p>
+        </div>
+        <div class="buttons">
+          <button id="mark-drunk">Finish Drink</button>
+          <button id="delete-drink" class="delete-drink">Delete Drink</button>
+        </div>
+        <progress id="progress" value="=0"></progress>
+      </div>
+    </template>
 
-		<script>
-			if ("serviceWorker" in navigator) {
-				navigator.serviceWorker.register("service-worker.js")
-			}
-		</script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js")
+      }
+    </script>
 
-		<!-- The core Firebase JS SDK is always required and must be listed first -->
-		<script src="/__/firebase/8.10.0/firebase-app.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/8.10.0/firebase-app.js"></script>
 
-		<!-- TODO: Add SDKs for Firebase products that you want to use
+    <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-		<script src="/__/firebase/8.10.0/firebase-analytics.js"></script>
+    <script src="/__/firebase/8.10.0/firebase-analytics.js"></script>
 
-		<!-- Initialize Firebase -->
-		<script src="/__/firebase/init.js"></script>
-	</body>
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+  </body>
 </html>
