@@ -1,0 +1,22 @@
+{
+  "name": "standards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calebmacgregor/standards.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/calebmacgregor/standards/issues"
+  },
+  "homepage": "https://github.com/calebmacgregor/standards#readme",
+  "dependencies": {
+    "firebase": "^8.10.0"
+  }
+}
