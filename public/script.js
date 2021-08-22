@@ -5,10 +5,10 @@ const form = document.querySelector("#form")
 const volumeInput = document.querySelector("#volume-input")
 const percentageInput = document.querySelector("#percentage-input")
 const standardsEstimatorStandards = document.querySelector(
-	"#standards-estimator-standards"
+  "#standards-estimator-standards"
 )
 const acknowledgeDisclaimerButton = document.querySelector(
-	"#acknowledge-disclosure"
+  "#acknowledge-disclosure"
 )
 
 const LOCAL_STORAGE_PREFIX = "DRINK_TRACK"
@@ -17,16 +17,16 @@ const PREFERENCES_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-preferences`
 const SESSION_ARCHIVE = `${LOCAL_STORAGE_PREFIX}-archive`
 
 const drinkSizeMapping = [
-	{ name: "pint-570", volume: 570, shortName: "pint" },
-	{ name: "schooner-425", volume: 425, shortName: "schooner" },
-	{ name: "pot-285", volume: 285, shortName: "pot" },
-	{ name: "can-440", volume: 440, shortName: "can" },
-	{ name: "can-375", volume: 375, shortName: "can" },
-	{ name: "can-355", volume: 355, shortName: "can" },
-	{ name: "can-330", volume: 330, shortName: "can" },
-	{ name: "glass-250", volume: 250, shortName: "glass" },
-	{ name: "glass-150", volume: 150, shortName: "glass" },
-	{ name: "shot-30", volume: 30, shortName: "shot" }
+  { name: "pint-570", volume: 570, shortName: "pint" },
+  { name: "schooner-425", volume: 425, shortName: "schooner" },
+  { name: "pot-285", volume: 285, shortName: "pot" },
+  { name: "can-440", volume: 440, shortName: "can" },
+  { name: "can-375", volume: 375, shortName: "can" },
+  { name: "can-355", volume: 355, shortName: "can" },
+  { name: "can-330", volume: 330, shortName: "can" },
+  { name: "glass-250", volume: 250, shortName: "glass" },
+  { name: "glass-150", volume: 150, shortName: "glass" },
+  { name: "shot-30", volume: 30, shortName: "shot" },
 ]
 
 let preferences = loadPreferences()
@@ -41,324 +41,322 @@ setTheme()
 // This is a terrible idea
 // Absolutely need to implement a better solution than this
 setInterval(() => {
-	renderData()
+  renderData()
 }, 20000)
-
-
 
 //Theme functions
 function chooseTheme(themeName) {
-	loadPreferences()
+  loadPreferences()
 
-	preferences.themeName = themeName
-	savePreferences()
-	setTheme()
+  preferences.themeName = themeName
+  savePreferences()
+  setTheme()
 }
 
 function setTheme() {
-	//Set dark as the default theme
-	const themeName = loadPreferences().themeName || "Dark"
+  //Set dark as the default theme
+  const themeName = loadPreferences().themeName || "Dark"
 
-	//FIXME
-	const body = document.querySelector("body")
+  //FIXME
+  const body = document.querySelector("body")
 
-	const lightTheme = document.querySelector("#Light")
-	lightTheme.classList.remove("selected-theme")
+  const lightTheme = document.querySelector("#Light")
+  lightTheme.classList.remove("selected-theme")
 
-	const darkTheme = document.querySelector("#Dark")
-	darkTheme.classList.remove("selected-theme")
+  const darkTheme = document.querySelector("#Dark")
+  darkTheme.classList.remove("selected-theme")
 
-	const BubblegumTheme = document.querySelector("#Bubblegum")
-	BubblegumTheme.classList.remove("selected-theme")
+  const BubblegumTheme = document.querySelector("#Bubblegum")
+  BubblegumTheme.classList.remove("selected-theme")
 
-	const mintTheme = document.querySelector("#Mint")
-	mintTheme.classList.remove("selected-theme")
+  const mintTheme = document.querySelector("#Mint")
+  mintTheme.classList.remove("selected-theme")
 
-	// const heartbreakerTheme = document.querySelector("#Heartbreaker")
-	// heartbreakerTheme.classList.remove("selected-theme")
+  // const heartbreakerTheme = document.querySelector("#Heartbreaker")
+  // heartbreakerTheme.classList.remove("selected-theme")
 
-	const fortressTheme = document.querySelector("#Fortress")
-	fortressTheme.classList.remove("selected-theme")
+  const fortressTheme = document.querySelector("#Fortress")
+  fortressTheme.classList.remove("selected-theme")
 
-	const chuckleTheme = document.querySelector("#Chuckle")
-	chuckleTheme.classList.remove("selected-theme")
+  const chuckleTheme = document.querySelector("#Chuckle")
+  chuckleTheme.classList.remove("selected-theme")
 
-	const selectedTheme = document.querySelector(`#${themeName}`)
-	selectedTheme.classList.toggle("selected-theme")
+  const selectedTheme = document.querySelector(`#${themeName}`)
+  selectedTheme.classList.toggle("selected-theme")
 
-	body.className = themeName
+  body.className = themeName
 }
 
 document.addEventListener("click", (e) => {
-	if (!e.target.classList.contains("theme")) return
+  if (!e.target.classList.contains("theme")) return
 
-	selectedItem = e.target.innerText
-	chooseTheme(selectedItem)
-	console.log(document.querySelector("body"))
+  selectedItem = e.target.innerText
+  chooseTheme(selectedItem)
+  console.log(document.querySelector("body"))
 })
 
 //Create the drink class
 class Drink {
-	constructor(volume, percentage) {
-		this.drinkID = new Date().getTime()
-		this.volume = volume
-		this.percentage = percentage
-		this.standards = standardsCalculator(volume, percentage)
-		this.logDatetime = new Date().getTime()
-		this.isDrunk = false
-		this.startedBurning = false
-		this.isBurned = false
-		this.completeDatetime = ""
-		this.burnStartDatetime = ""
-		this.burnedDatetime = ""
-		this.predictedBurnDatetime = ""
-		this.timeToBurn = timeToBurn(this.standards)
-		this.archived = false
-		this.sessionID = undefined
-	}
+  constructor(volume, percentage) {
+    this.drinkID = new Date().getTime()
+    this.volume = volume
+    this.percentage = percentage
+    this.standards = standardsCalculator(volume, percentage)
+    this.logDatetime = new Date().getTime()
+    this.isDrunk = false
+    this.startedBurning = false
+    this.isBurned = false
+    this.completeDatetime = ""
+    this.burnStartDatetime = ""
+    this.burnedDatetime = ""
+    this.predictedBurnDatetime = ""
+    this.timeToBurn = timeToBurn(this.standards)
+    this.archived = false
+    this.sessionID = undefined
+  }
 }
 
 function drinkQueue() {
-	//Create an array of drinks sorted from oldest started to newest started
-	const sortedArray = drinks.sort((a, b) => {
-		if (a.logDatetime < b.logDatetime) {
-			return -1
-		}
-		if (a.logDatetime > b.logDatetime) {
-			return 1
-		} else return 0
-	})
+  //Create an array of drinks sorted from oldest started to newest started
+  const sortedArray = drinks.sort((a, b) => {
+    if (a.logDatetime < b.logDatetime) {
+      return -1
+    }
+    if (a.logDatetime > b.logDatetime) {
+      return 1
+    } else return 0
+  })
 
-	//Initiate a variable to store the current earliest time a drink can start to be burned
-	let earliestBurnStart
+  //Initiate a variable to store the current earliest time a drink can start to be burned
+  let earliestBurnStart
 
-	//Loop through every element in the array
-	sortedArray.forEach((drink) => {
-		if (drink.isDrunk == true && earliestBurnStart == undefined) {
-			earliestBurnStart = drink.logDatetime
+  //Loop through every element in the array
+  sortedArray.forEach((drink) => {
+    if (drink.isDrunk == true && earliestBurnStart == undefined) {
+      earliestBurnStart = drink.logDatetime
 
-			drink.burnStartDatetime = earliestBurnStart
-			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+      drink.burnStartDatetime = earliestBurnStart
+      drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
 
-			drink.startedBurning = true
+      drink.startedBurning = true
 
-			earliestBurnStart = drink.predictedBurnDatetime
-		} else if (drink.isDrunk == true && earliestBurnStart < drink.logDatetime) {
-			earliestBurnStart = drink.logDatetime
+      earliestBurnStart = drink.predictedBurnDatetime
+    } else if (drink.isDrunk == true && earliestBurnStart < drink.logDatetime) {
+      earliestBurnStart = drink.logDatetime
 
-			drink.burnStartDatetime = earliestBurnStart
-			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
-			drink.startedBurning = true
-			earliestBurnStart = drink.predictedBurnDatetime
-		} else if (drink.isDrunk == true && earliestBurnStart != undefined) {
-			drink.burnStartDatetime = earliestBurnStart
-			drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
-			drink.burnStartDatetime < new Date().getTime()
-				? (drink.startedBurning = true)
-				: (drink.startedBurning = false)
+      drink.burnStartDatetime = earliestBurnStart
+      drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+      drink.startedBurning = true
+      earliestBurnStart = drink.predictedBurnDatetime
+    } else if (drink.isDrunk == true && earliestBurnStart != undefined) {
+      drink.burnStartDatetime = earliestBurnStart
+      drink.predictedBurnDatetime = earliestBurnStart + drink.timeToBurn
+      drink.burnStartDatetime < new Date().getTime()
+        ? (drink.startedBurning = true)
+        : (drink.startedBurning = false)
 
-			earliestBurnStart = drink.predictedBurnDatetime
-		}
-	})
+      earliestBurnStart = drink.predictedBurnDatetime
+    }
+  })
 
-	//Sort drinks by complete time
-	//This is so that incomplete drinks show at the top
-	//And complete drinks are below that
-	//Makes for easier completing of drinks/seeing which drink is next to finish
-	const outputArray = sortedArray.sort((a, b) => {
-		if (a.predictedBurnDatetime < b.predictedBurnDatetime) {
-			return -1
-		}
-		if (a.predictedBurnDatetime > b.predictedBurnDatetime) {
-			return 1
-		} else return 0
-	})
-	//Save the array
-	drinks = outputArray
+  //Sort drinks by complete time
+  //This is so that incomplete drinks show at the top
+  //And complete drinks are below that
+  //Makes for easier completing of drinks/seeing which drink is next to finish
+  const outputArray = sortedArray.sort((a, b) => {
+    if (a.predictedBurnDatetime < b.predictedBurnDatetime) {
+      return -1
+    }
+    if (a.predictedBurnDatetime > b.predictedBurnDatetime) {
+      return 1
+    } else return 0
+  })
+  //Save the array
+  drinks = outputArray
 }
 
 //Calculate the amount of time until a given drink is burned off
 function alcoholRemaining(drink) {
-	//Short circuit if the drink has not been completed
-	// if (drink.isDrunk == false) return "Drink not completed"
+  //Short circuit if the drink has not been completed
+  // if (drink.isDrunk == false) return "Drink not completed"
 
-	const currentTime = new Date().getTime()
-	const timeSinceStarted = currentTime - drink.burnStartDatetime
-	const timeTillBurned = drink.predictedBurnDatetime - currentTime
+  const currentTime = new Date().getTime()
+  const timeSinceStarted = currentTime - drink.burnStartDatetime
+  const timeTillBurned = drink.predictedBurnDatetime - currentTime
 
-	let percentBurned
-	if (timeSinceStarted / drink.timeToBurn > 1) {
-		percentBurned = 1
-	} else {
-		percentBurned = timeSinceStarted / drink.timeToBurn
-	}
+  let percentBurned
+  if (timeSinceStarted / drink.timeToBurn > 1) {
+    percentBurned = 1
+  } else {
+    percentBurned = timeSinceStarted / drink.timeToBurn
+  }
 
-	let standardsRemaining
-	if (drink.standards - drink.standards * percentBurned < 0) {
-		//If there's less than 0% remaining on the drink, reset it to 0
-		standardsRemaining = 0
-	} else if (drink.startedBurning == true) {
-		//If the drink has started burning, calculate the standards remaining
-		standardsRemaining = drink.standards - drink.standards * percentBurned
-	} else if (drink.isDrunk == true) {
-		//If the drink hasn't started burning then set the standards
-		//equal to the standards calculated by standardsCalculator
-		standardsRemaining = drink.standards
-	} else {
-		//Coverall that will break things if we hit an exception
-		//I should probably handle errors properly
-		standardsRemaining = 900
-	}
+  let standardsRemaining
+  if (drink.standards - drink.standards * percentBurned < 0) {
+    //If there's less than 0% remaining on the drink, reset it to 0
+    standardsRemaining = 0
+  } else if (drink.startedBurning == true) {
+    //If the drink has started burning, calculate the standards remaining
+    standardsRemaining = drink.standards - drink.standards * percentBurned
+  } else if (drink.isDrunk == true) {
+    //If the drink hasn't started burning then set the standards
+    //equal to the standards calculated by standardsCalculator
+    standardsRemaining = drink.standards
+  } else {
+    //Coverall that will break things if we hit an exception
+    //I should probably handle errors properly
+    standardsRemaining = 900
+  }
 
-	const isBurned = standardsRemaining > 0 ? false : true
-	const burnedDatetime =
-		standardsRemaining > 0 ? undefined : drink.predictedBurnDatetime
+  const isBurned = standardsRemaining > 0 ? false : true
+  const burnedDatetime =
+    standardsRemaining > 0 ? undefined : drink.predictedBurnDatetime
 
-	//Update the drink object
-	if (drink.startedBurning == false) {
-		//Need to set a value here so that renderDrink doesn't break
-		//Fix later
-		drink.percentBurned = 0
-		drink.standardsRemaining = standardsRemaining
-		drink.isBurned = isBurned
-		drink.burnedDatetime = burnedDatetime
-	} else {
-		drink.standardsRemaining = standardsRemaining
-		drink.timeTillBurned = timeTillBurned
-		drink.percentBurned = percentBurned
-		drink.isBurned = isBurned
-		drink.burnedDatetime = burnedDatetime
-	}
+  //Update the drink object
+  if (drink.startedBurning == false) {
+    //Need to set a value here so that renderDrink doesn't break
+    //Fix later
+    drink.percentBurned = 0
+    drink.standardsRemaining = standardsRemaining
+    drink.isBurned = isBurned
+    drink.burnedDatetime = burnedDatetime
+  } else {
+    drink.standardsRemaining = standardsRemaining
+    drink.timeTillBurned = timeTillBurned
+    drink.percentBurned = percentBurned
+    drink.isBurned = isBurned
+    drink.burnedDatetime = burnedDatetime
+  }
 }
 
 //Mark drinks as drunk
 function markDrunk(drinkElement) {
-	//Find the associated object in the array
-	const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
-	//Update the isDrunk attribute
-	drink.isDrunk = true
-	//Update the completeDateimt attribute
-	drink.completeDatetime = new Date().getTime()
-	updateData()
-	renderData()
+  //Find the associated object in the array
+  const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
+  //Update the isDrunk attribute
+  drink.isDrunk = true
+  //Update the completeDateimt attribute
+  drink.completeDatetime = new Date().getTime()
+  updateData()
+  renderData()
 }
 
 //Event listener to trigger estimator card render
 form.addEventListener("input", () => {
-	const volume = volumeInput.value
-	const percentage = percentageInput.value
+  const volume = volumeInput.value
+  const percentage = percentageInput.value
 
-	if (volume && percentage) renderEstimator(volume, percentage)
+  if (volume && percentage) renderEstimator(volume, percentage)
 })
 
 //Event listener to add new drinks to the beginning of the drinks storage array
 form.addEventListener("submit", (e) => {
-	e.preventDefault()
+  e.preventDefault()
 
-	const volume = volumeInput.value
-	const percentage = percentageInput.value
+  const volume = volumeInput.value
+  const percentage = percentageInput.value
 
-	if (!volume || !percentage) return
-	const drink = new Drink(volume, percentage)
-	const addDrinkTitle = document.querySelector("#add-drink-title")
-	const standardsEstimatorStandardsSubtitle = document.querySelector(
-		"#standards-estimator-subtitle"
-	)
+  if (!volume || !percentage) return
+  const drink = new Drink(volume, percentage)
+  const addDrinkTitle = document.querySelector("#add-drink-title")
+  const standardsEstimatorStandardsSubtitle = document.querySelector(
+    "#standards-estimator-subtitle"
+  )
 
-	drinks.unshift(drink)
+  drinks.unshift(drink)
 
-	volumeInput.value = ""
-	percentageInput.value = ""
-	standardsEstimatorStandards.innerText = ""
-	standardsEstimatorStandardsSubtitle.innerText = ""
+  volumeInput.value = ""
+  percentageInput.value = ""
+  standardsEstimatorStandards.innerText = ""
+  standardsEstimatorStandardsSubtitle.innerText = ""
 
-	addDrinkTitle.classList.remove("shrunk")
+  addDrinkTitle.classList.remove("shrunk")
 
-	updateData()
-	renderData()
+  updateData()
+  renderData()
 })
 
 //Event listener to add an 'another round' drink to the drinks storage array
 document.addEventListener("click", (e) => {
-	if (!e.target.matches("#another-round-button")) return
+  if (!e.target.matches("#another-round-button")) return
 
-	lastDrink = anotherRound().lastDrink
-	drink = new Drink(lastDrink.volume, lastDrink.percentage)
+  lastDrink = anotherRound().lastDrink
+  drink = new Drink(lastDrink.volume, lastDrink.percentage)
 
-	drinks.unshift(drink)
+  drinks.unshift(drink)
 
-	updateData()
-	renderData()
+  updateData()
+  renderData()
 })
 
 //Function to delete on confirm delete
 //Set as a named function so that it is removable
 function confirmDelete(e) {
-	if (!e.target.classList.contains("delete-confirm")) return
-	const DOMDrink = e.target.closest("#drink-card")
+  if (!e.target.classList.contains("delete-confirm")) return
+  const DOMDrink = e.target.closest("#drink-card")
 
-	e.target.closest("#drink-card").classList.add("deleted")
+  e.target.closest("#drink-card").classList.add("deleted")
 
-	setTimeout(() => {
-		deleteDrink(DOMDrink)
-		updateData()
-		renderData()
-	}, 250)
+  setTimeout(() => {
+    deleteDrink(DOMDrink)
+    updateData()
+    renderData()
+  }, 250)
 }
 
 //Add a delete-confirm drink class to the small delete button on initial click
 //Remove it after 3 seconds
 document.addEventListener("click", (e) => {
-	if (!e.target.matches("#small-delete-drink")) return
+  if (!e.target.matches("#small-delete-drink")) return
 
-	e.target.classList.add("delete-confirm")
-	e.target.innerText = ""
-	//Update text once the button has grown
-	setTimeout(() => {
-		e.target.innerText = "Delete"
-	}, 150)
+  e.target.classList.add("delete-confirm")
+  e.target.innerText = ""
+  //Update text once the button has grown
+  setTimeout(() => {
+    e.target.innerText = "Delete"
+  }, 150)
 
-	//Add deletion event listener
-	e.target.addEventListener("click", confirmDelete)
+  //Add deletion event listener
+  e.target.addEventListener("click", confirmDelete)
 
-	setTimeout(() => {
-		e.target.classList.remove("delete-confirm")
-		e.target.innerText = "X"
-		e.target.removeEventListener("click", confirmDelete)
-	}, 3000)
+  setTimeout(() => {
+    e.target.classList.remove("delete-confirm")
+    e.target.innerText = "X"
+    e.target.removeEventListener("click", confirmDelete)
+  }, 3000)
 })
 
 //Delete drinks when the delete button is clicked
 document.addEventListener("click", (e) => {
-	//Short circuit if the element clicked is not the button with the ID of delete-drink
-	if (!e.target.classList.contains("delete-drink")) return
+  //Short circuit if the element clicked is not the button with the ID of delete-drink
+  if (!e.target.classList.contains("delete-drink")) return
 
-	const DOMDrink = e.target.closest("#drink-card")
+  const DOMDrink = e.target.closest("#drink-card")
 
-	e.target.closest("#drink-card").classList.add("deleted")
+  e.target.closest("#drink-card").classList.add("deleted")
 
-	setTimeout(() => {
-		deleteDrink(DOMDrink)
-		updateData()
-		renderData()
-	}, 150)
+  setTimeout(() => {
+    deleteDrink(DOMDrink)
+    updateData()
+    renderData()
+  }, 150)
 })
 
 //Mark a drink as drunk when the drink button is clicked
 document.addEventListener("click", (e) => {
-	//Short circuit if the element clicked is not the button with the ID of mark-drunk
-	if (!e.target.matches("#mark-drunk")) return
+  //Short circuit if the element clicked is not the button with the ID of mark-drunk
+  if (!e.target.matches("#mark-drunk")) return
 
-	const addDrinkTitle = document.querySelector("#add-drink-title")
+  const addDrinkTitle = document.querySelector("#add-drink-title")
 
-	addDrinkTitle.classList.remove("shrunk")
+  addDrinkTitle.classList.remove("shrunk")
 
-	const DOMDrink = e.target.closest("#drink-card")
+  const DOMDrink = e.target.closest("#drink-card")
 
-	markDrunk(DOMDrink)
+  markDrunk(DOMDrink)
 
-	updateData()
-	renderData()
+  updateData()
+  renderData()
 })
 
 //Functions
@@ -367,270 +365,274 @@ document.addEventListener("click", (e) => {
 
 //Render the estimator card
 function renderEstimator(volume, percentage) {
-	const standards = standardsCalculator(volume, percentage)
-	const hoursToBurn = Math.floor(timeToBurn(standards) / 1000 / 60 / 60)
-	const minutesToBurn = Math.floor(
-		timeToBurn(standards) / 1000 / 60 - hoursToBurn * 60
-	)
-	const addDrinkTitle = document.querySelector("#add-drink-title")
-	const standardsEstimatorStandardsSubtitle = document.querySelector(
-		"#standards-estimator-subtitle"
-	)
+  const standards = standardsCalculator(volume, percentage)
+  const hoursToBurn = Math.floor(timeToBurn(standards) / 1000 / 60 / 60)
+  const minutesToBurn = Math.floor(
+    timeToBurn(standards) / 1000 / 60 - hoursToBurn * 60
+  )
+  const addDrinkTitle = document.querySelector("#add-drink-title")
+  const standardsEstimatorStandardsSubtitle = document.querySelector(
+    "#standards-estimator-subtitle"
+  )
 
-	if (volume && percentage) addDrinkTitle.classList.add("shrunk")
+  if (volume && percentage) addDrinkTitle.classList.add("shrunk")
 
-	//Run this through an if statement so that it only slows down on the first render
-	function updateStandardsEstimator() {
-		standardsEstimatorStandards.innerText = `${standards}x Standards`
-		if (hoursToBurn > 0) {
-			standardsEstimatorStandardsSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
-		} else {
-			standardsEstimatorStandardsSubtitle.innerText = `${minutesToBurn} minutes to burn`
-		}
-	}
+  //Run this through an if statement so that it only slows down on the first render
+  function updateStandardsEstimator() {
+    standardsEstimatorStandards.innerText = `${standards}x Standards`
+    if (hoursToBurn > 0) {
+      standardsEstimatorStandardsSubtitle.innerText = `${hoursToBurn} hours and ${minutesToBurn} minutes to burn`
+    } else {
+      standardsEstimatorStandardsSubtitle.innerText = `${minutesToBurn} minutes to burn`
+    }
+  }
 
-	//Set a very small delay so that the title has time to animate
-	if (!volume && !percentage) {
-		setTimeout(() => {
-			updateStandardsEstimator()
-		}, 200)
-	} else {
-		updateStandardsEstimator()
-	}
+  //Set a very small delay so that the title has time to animate
+  if (!volume && !percentage) {
+    setTimeout(() => {
+      updateStandardsEstimator()
+    }, 200)
+  } else {
+    updateStandardsEstimator()
+  }
 }
 
 //Render the 'another round' card
 function anotherRound() {
-	const anotherRoundContainer = document.querySelector(
-		".another-round-container"
-	)
-	const anotherRoundABV = document.querySelector("#another-round-abv")
-	const anotherRoundStandards = document.querySelector(
-		"#another-round-standards"
-	)
+  console.log(drinks.length)
+  const anotherRoundContainer = document.querySelector(
+    ".another-round-container"
+  )
+  const anotherRoundABV = document.querySelector("#another-round-abv")
+  const anotherRoundStandards = document.querySelector(
+    "#another-round-standards"
+  )
 
-	if (drinks.length < 1) {
-		anotherRoundContainer.style.display = "none"
-		return
-	}
+  if (drinks.length < 1) {
+    anotherRoundContainer.style.display = "none"
+    return
+  }
 
-	const drinkLogDatetimes = drinks.map((drink) => drink.logDatetime)
-	let lastDrinkLogDatetime
-	if (drinkLogDatetimes.length > 0) {
-		lastDrinkLogDatetime = drinkLogDatetimes.reduce((a, b) => Math.max(a, b))
-	} else {
-		lastDrinkLogDatetime = drinkLogDatetimes[0]
-	}
-	const lastDrink = drinks.find(
-		(drink) => drink.logDatetime == lastDrinkLogDatetime
-	)
-	const lastDrinkName = drinkSizeMapping.find(
-		(drink) => drink.name == lastDrink.volume
-	).shortName
+  const drinkLogDatetimes = drinks.map((drink) => drink.logDatetime)
+  let lastDrinkLogDatetime
+  if (drinkLogDatetimes.length > 0) {
+    lastDrinkLogDatetime = drinkLogDatetimes.reduce((a, b) => Math.max(a, b))
+  } else {
+    lastDrinkLogDatetime = drinkLogDatetimes[0]
+  }
 
-	if (drinks.length < 1) {
-		anotherRoundContainer.style.display = "none"
-	} else {
-		anotherRoundContainer.style.display = "flex"
-		anotherRoundABV.innerText = `A ${lastDrinkName} of ${lastDrink.percentage}%`
-		anotherRoundStandards.innerText = `${lastDrink.standards}x standards`
-	}
+  const lastDrink = drinks.find(
+    (drink) => drink.logDatetime == lastDrinkLogDatetime
+  )
 
-	return { lastDrink: lastDrink, lastDrinkName: lastDrinkName }
+  const lastDrinkName = drinkSizeMapping.find(
+    (drink) => drink.name == lastDrink.volume
+  ).shortName
+
+  if (drinks.length < 1) {
+    anotherRoundContainer.style.display = "none"
+  } else {
+    anotherRoundContainer.style.display = "flex"
+    anotherRoundABV.innerText = `A ${lastDrinkName} of ${lastDrink.percentage}%`
+    anotherRoundStandards.innerText = `${lastDrink.standards}x standards`
+  }
+
+  return { lastDrink: lastDrink, lastDrinkName: lastDrinkName }
 }
 
 //Render the stats card
 function renderStats() {
-	//Ensure that all drink objects have the latest data before rendering
-	updateData()
-	//Grab the DOM elements needed
-	const activeStandards = document.querySelector("#active-standards")
-	const activeStandardsSubtitle = document.querySelector(
-		"#active-standards-subtitle"
-	)
-	const standardsCountdown = document.querySelector("#standards-countdown")
-	const standardsConsumedElement = document.querySelector("#standards-consumed")
+  //Ensure that all drink objects have the latest data before rendering
+  updateData()
+  //Grab the DOM elements needed
+  const activeStandards = document.querySelector("#active-standards")
+  const activeStandardsSubtitle = document.querySelector(
+    "#active-standards-subtitle"
+  )
+  const standardsCountdown = document.querySelector("#standards-countdown")
+  const standardsConsumedElement = document.querySelector("#standards-consumed")
 
-	const allClear = document.querySelector("#all-clear")
+  const allClear = document.querySelector("#all-clear")
 
-	const hoursTillAllClear = Math.floor(
-		standardsInSystem().timeTillAllClear / 1000 / 60 / 60
-	)
-	const minutesTillAllClear = Math.floor(
-		standardsInSystem().timeTillAllClear / 1000 / 60 - hoursTillAllClear * 60
-	)
+  const hoursTillAllClear = Math.floor(
+    standardsInSystem().timeTillAllClear / 1000 / 60 / 60
+  )
+  const minutesTillAllClear = Math.floor(
+    standardsInSystem().timeTillAllClear / 1000 / 60 - hoursTillAllClear * 60
+  )
 
-	if (standardsConsumed() != 0) {
-		activeStandards.style.fontSize = "28px"
-		activeStandards.innerText = `${
-			standardsInSystem().standardsInSystem
-		}x standards`
+  if (standardsConsumed() != 0) {
+    activeStandards.style.fontSize = "28px"
+    activeStandards.innerText = `${
+      standardsInSystem().standardsInSystem
+    }x standards`
 
-		//Set values and make items visible when drinks are in the system
-		activeStandardsSubtitle.innerText = "currently in your system"
-		activeStandardsSubtitle.style.display = "block"
+    //Set values and make items visible when drinks are in the system
+    activeStandardsSubtitle.innerText = "currently in your system"
+    activeStandardsSubtitle.style.display = "block"
 
-		//Not using this until I can make it look nicer
-		// standardsConsumedElement.innerText = `${standardsConsumed()}x standards consumed overall`
-		// standardsConsumedElement.style.display = "block"
+    //Not using this until I can make it look nicer
+    // standardsConsumedElement.innerText = `${standardsConsumed()}x standards consumed overall`
+    // standardsConsumedElement.style.display = "block"
 
-		if (hoursTillAllClear == 0) {
-			standardsCountdown.innerText = `${minutesTillAllClear} minutes\ntill zero standards`
-		} else {
-			standardsCountdown.innerText = `${hoursTillAllClear} hours and ${minutesTillAllClear} minutes\ntill zero standards`
-		}
-		standardsCountdown.style.display = "block"
+    if (hoursTillAllClear == 0) {
+      standardsCountdown.innerText = `${minutesTillAllClear} minutes\ntill zero standards`
+    } else {
+      standardsCountdown.innerText = `${hoursTillAllClear} hours and ${minutesTillAllClear} minutes\ntill zero standards`
+    }
+    standardsCountdown.style.display = "block"
 
-		allClear.innerText = `All clear by ${timeConverter(
-			standardsInSystem().allClearTime
-		)}`
-		allClear.style.display = "block"
-	}
+    allClear.innerText = `All clear by ${timeConverter(
+      standardsInSystem().allClearTime
+    )}`
+    allClear.style.display = "block"
+  }
 
-	//Cleanup stats card when no drinks are in the system
-	if (standardsConsumed() == 0) {
-		activeStandards.style.fontSize = "48px"
-		activeStandards.innerText = "Get started"
-		activeStandardsSubtitle.style.display = "none"
-		allClear.style.display = "none"
-		standardsCountdown.style.display = "none"
-		standardsConsumedElement.style.display = "none"
-	}
+  //Cleanup stats card when no drinks are in the system
+  if (standardsConsumed() == 0) {
+    activeStandards.style.fontSize = "48px"
+    activeStandards.innerText = "Get started"
+    activeStandardsSubtitle.style.display = "none"
+    allClear.style.display = "none"
+    standardsCountdown.style.display = "none"
+    standardsConsumedElement.style.display = "none"
+  }
 }
 
 //Render drink
 function renderDrink(drink) {
-	//Ensure that all drink objects have the latest data before rendering
-	updateData()
+  //Ensure that all drink objects have the latest data before rendering
+  updateData()
 
-	//Grab the list that drinks will be rendered to
-	const template = document.querySelector("#drink-template")
-	const container = document.querySelector("#container")
+  //Grab the list that drinks will be rendered to
+  const template = document.querySelector("#drink-template")
+  const container = document.querySelector("#container")
 
-	//Grab the individual elements used in rendering
-	const templateClone = template.content.cloneNode(true)
-	const drinkContainer = templateClone.querySelector("#drink-card")
-	const standards = templateClone.querySelector("#standards")
-	const burnStartDatetime = templateClone.querySelector("#burn_start-datetime")
-	const finishedDatetime = templateClone.querySelector("#finished-datetime")
-	const burnedDatetime = templateClone.querySelector("#burned-datetime")
-	const drinkButton = templateClone.querySelector("#mark-drunk")
-	const deleteButton = templateClone.querySelector("#delete-drink")
-	const smallDeleteButton = templateClone.querySelector("#small-delete-drink")
-	const progressBar = templateClone.querySelector("#progress")
+  //Grab the individual elements used in rendering
+  const templateClone = template.content.cloneNode(true)
+  const drinkContainer = templateClone.querySelector("#drink-card")
+  const standards = templateClone.querySelector("#standards")
+  const burnStartDatetime = templateClone.querySelector("#burn_start-datetime")
+  const finishedDatetime = templateClone.querySelector("#finished-datetime")
+  const burnedDatetime = templateClone.querySelector("#burned-datetime")
+  const drinkButton = templateClone.querySelector("#mark-drunk")
+  const deleteButton = templateClone.querySelector("#delete-drink")
+  const smallDeleteButton = templateClone.querySelector("#small-delete-drink")
+  const progressBar = templateClone.querySelector("#progress")
 
-	//Add a 'drunk' class to a drink-card if that drink has been drunk
-	drink.isDrunk ? drinkContainer.classList.add("drunk") : ""
+  //Add a 'drunk' class to a drink-card if that drink has been drunk
+  drink.isDrunk ? drinkContainer.classList.add("drunk") : ""
 
-	//Remove the 'delete' button from the element if it has been marked as drunk
-	if (drinkContainer.classList.contains("drunk")) {
-		progressBar.value = drink.percentBurned
-		drinkContainer.classList.contains("drunk") ? deleteButton.remove() : ""
-		drinkButton.remove()
-	} else {
-		progressBar.remove()
-		smallDeleteButton.remove()
-	}
+  //Remove the 'delete' button from the element if it has been marked as drunk
+  if (drinkContainer.classList.contains("drunk")) {
+    progressBar.value = drink.percentBurned
+    drinkContainer.classList.contains("drunk") ? deleteButton.remove() : ""
+    drinkButton.remove()
+  } else {
+    progressBar.remove()
+    smallDeleteButton.remove()
+  }
 
-	//Set the data element drinkId to the same as the object drinkID
-	drinkContainer.dataset.drinkId = drink.drinkID
+  //Set the data element drinkId to the same as the object drinkID
+  drinkContainer.dataset.drinkId = drink.drinkID
 
-	//Render the number of standards
-	standards.innerText = `${drink.standards}x standards`
+  //Render the number of standards
+  standards.innerText = `${drink.standards}x standards`
 
-	const minutesSinceStartedString =
-		Math.floor((new Date().getTime() - drink.logDatetime) / 1000 / 60) == 1
-			? "minute"
-			: "minutes"
+  const minutesSinceStartedString =
+    Math.floor((new Date().getTime() - drink.logDatetime) / 1000 / 60) == 1
+      ? "minute"
+      : "minutes"
 
-	finishedDatetime.innerText = drink.isDrunk
-		? `Finished in ${Math.floor(
-				(drink.completeDatetime - drink.logDatetime) / 1000 / 60
-		  )} ${minutesSinceStartedString}`
-		: `Started ${Math.floor(
-				(new Date().getTime() - drink.logDatetime) / 1000 / 60
-		  )} ${minutesSinceStartedString} ago`
+  finishedDatetime.innerText = drink.isDrunk
+    ? `Finished in ${Math.floor(
+        (drink.completeDatetime - drink.logDatetime) / 1000 / 60
+      )} ${minutesSinceStartedString}`
+    : `Started ${Math.floor(
+        (new Date().getTime() - drink.logDatetime) / 1000 / 60
+      )} ${minutesSinceStartedString} ago`
 
-	burnStartDatetime.innerText = drink.burnStartDatetime
-		? `Starts burning at ${timeConverter(drink.burnStartDatetime)}`
-		: ""
+  burnStartDatetime.innerText = drink.burnStartDatetime
+    ? `Starts burning at ${timeConverter(drink.burnStartDatetime)}`
+    : ""
 
-	burnedDatetime.innerText = drink.predictedBurnDatetime
-		? `Burned off by ${timeConverter(drink.predictedBurnDatetime)}`
-		: ""
+  burnedDatetime.innerText = drink.predictedBurnDatetime
+    ? `Burned off by ${timeConverter(drink.predictedBurnDatetime)}`
+    : ""
 
-	//Render the element to the DOM
-	container.appendChild(templateClone)
+  //Render the element to the DOM
+  container.appendChild(templateClone)
 }
 
 //Calculation functions
 
 //Calculate the number of standards in a drink
 function standardsCalculator(volumeName, percentage) {
-	const volume = drinkSizeMapping.find((element) => element.name == volumeName)
-		.volume
+  const volume = drinkSizeMapping.find(
+    (element) => element.name == volumeName
+  ).volume
 
-	if (percentage == ".") return
-	//Return the number of standards rounded to 1 decimal place
-	return ((volume / 1000) * percentage * 0.789).toFixed(1)
+  if (percentage == ".") return
+  //Return the number of standards rounded to 1 decimal place
+  return ((volume / 1000) * percentage * 0.789).toFixed(1)
 }
 
 //Calculate the time taken to burn off the alcohol in a drink
 function timeToBurn(standards) {
-	return standards * 60 * 60 * 1000
+  return standards * 60 * 60 * 1000
 }
 
 //Data movement functions
 
 function loadPreferences() {
-	const preferencesString = localStorage.getItem(PREFERENCES_STORAGE_KEY)
-	return JSON.parse(preferencesString) || {}
+  const preferencesString = localStorage.getItem(PREFERENCES_STORAGE_KEY)
+  return JSON.parse(preferencesString) || {}
 }
 
 function savePreferences() {
-	localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(preferences))
+  localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(preferences))
 }
 
 //Grab items from the browser storage and add them to the todos array
 function loadDrinks() {
-	//Grab the string value from browser storage
-	const drinksString = localStorage.getItem(DRINKS_STORAGE_KEY)
-	//Convert the string to an array of JSON objects, or return an empty array if the string is empty
-	return JSON.parse(drinksString) || []
+  //Grab the string value from browser storage
+  const drinksString = localStorage.getItem(DRINKS_STORAGE_KEY)
+  //Convert the string to an array of JSON objects, or return an empty array if the string is empty
+  return JSON.parse(drinksString) || []
 }
 
 //Save todos to the browser storage
 function saveDrinks() {
-	//Set the browser storage equal to the stringified todos array
-	localStorage.setItem(DRINKS_STORAGE_KEY, JSON.stringify(drinks))
+  //Set the browser storage equal to the stringified todos array
+  localStorage.setItem(DRINKS_STORAGE_KEY, JSON.stringify(drinks))
 }
 
 //Delete drinks from both the DOM and the array
 function deleteDrink(drinkElement) {
-	//Find the item in the array that corresponds with this drink-card
-	const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
-	//Remove the drink-card element
-	drinkElement.remove()
-	//Update the array to not include the drink
-	drinks = drinks.filter((d) => d.drinkID != drink.drinkID)
+  //Find the item in the array that corresponds with this drink-card
+  const drink = drinks.find((d) => d.drinkID == drinkElement.dataset.drinkId)
+  //Remove the drink-card element
+  drinkElement.remove()
+  //Update the array to not include the drink
+  drinks = drinks.filter((d) => d.drinkID != drink.drinkID)
 }
 
 //Utility/helper functions
 //Creates 12 hour time strings from datetime integers
 function timeConverter(dateTime) {
-	dateTime = new Date(dateTime)
+  dateTime = new Date(dateTime)
 
-	if (new Date().getDay() != dateTime.getDay()) {
-		return `${dateTime.toLocaleTimeString(["en-AU"], {
-			timeStyle: "short"
-		})} on ${dateTime.toLocaleDateString(["en-AU"], {
-			weekday: "long"
-		})}`
-	} else {
-		return dateTime.toLocaleTimeString(["en-AU"], {
-			timeStyle: "short"
-		})
-	}
+  if (new Date().getDay() != dateTime.getDay()) {
+    return `${dateTime.toLocaleTimeString(["en-AU"], {
+      timeStyle: "short",
+    })} on ${dateTime.toLocaleDateString(["en-AU"], {
+      weekday: "long",
+    })}`
+  } else {
+    return dateTime.toLocaleTimeString(["en-AU"], {
+      timeStyle: "short",
+    })
+  }
 }
 
 //Simple function to run other functions that update the Drink objects and then save that data
@@ -638,67 +640,67 @@ function timeConverter(dateTime) {
 //This needs optimising, it's currently running multiple times per refresh
 //I thiink it's something to do with functions running on eventListener generation
 function updateData() {
-	drinks.forEach(alcoholRemaining)
-	drinkQueue()
-	saveDrinks()
-	loadDrinks()
+  drinks.forEach(alcoholRemaining)
+  drinkQueue()
+  saveDrinks()
+  loadDrinks()
 }
 
 //Simple function to run other functions that render the DOM
 function renderData() {
-	container.innerHTML = ""
-	anotherRound()
-	drinks.forEach(renderDrink)
-	renderStats()
+  container.innerHTML = ""
+  anotherRound()
+  drinks.forEach(renderDrink)
+  renderStats()
 }
 
 //Build a system to calculate the amount of alcohol still in someone's system
 function standardsInSystem() {
-	completedAndUnburnedDrinks = drinks.filter(
-		(drink) => drink.isDrunk == true && drink.isBurned == false
-	)
-	const output = completedAndUnburnedDrinks.reduce((total, drink) => {
-		return total + parseFloat(drink.standardsRemaining)
-	}, 0)
+  completedAndUnburnedDrinks = drinks.filter(
+    (drink) => drink.isDrunk == true && drink.isBurned == false
+  )
+  const output = completedAndUnburnedDrinks.reduce((total, drink) => {
+    return total + parseFloat(drink.standardsRemaining)
+  }, 0)
 
-	const drinkBurnTimes = drinks
-		.filter((drink) => drink.predictedBurnDatetime)
-		.map((drink) => drink.predictedBurnDatetime)
+  const drinkBurnTimes = drinks
+    .filter((drink) => drink.predictedBurnDatetime)
+    .map((drink) => drink.predictedBurnDatetime)
 
-	let latestBurnTime
+  let latestBurnTime
 
-	if (drinkBurnTimes.length > 0) {
-		latestBurnTime = drinkBurnTimes.reduce((a, b) => Math.max(a, b))
-	} else {
-		latestBurnTime = new Date().getTime()
-	}
+  if (drinkBurnTimes.length > 0) {
+    latestBurnTime = drinkBurnTimes.reduce((a, b) => Math.max(a, b))
+  } else {
+    latestBurnTime = new Date().getTime()
+  }
 
-	return {
-		standardsInSystem: output.toFixed(2),
-		gramsInSystem: output * 10,
-		timeTillAllClear: output * 60 * 60 * 1000,
-		allClearTime: latestBurnTime
-	}
+  return {
+    standardsInSystem: output.toFixed(2),
+    gramsInSystem: output * 10,
+    timeTillAllClear: output * 60 * 60 * 1000,
+    allClearTime: latestBurnTime,
+  }
 }
 
 //Build a system to calculate the total number of standards consumed
 function standardsConsumed() {
-	completedDrinks = drinks.filter((drink) => drink.isDrunk == true)
-	const output = completedDrinks.reduce((total, drink) => {
-		return total + parseFloat(drink.standards)
-	}, 0)
-	return output.toFixed(2)
+  completedDrinks = drinks.filter((drink) => drink.isDrunk == true)
+  const output = completedDrinks.reduce((total, drink) => {
+    return total + parseFloat(drink.standards)
+  }, 0)
+  return output.toFixed(2)
 }
 
 //Activate and deactive side panel
 //FIXME
 //Need to lock scrolling when side panel is active
 function disableSidePanel(e) {
-	if (e.target.classList.contains("nav")) return
-	const sidePanel = document.querySelector("#side-panel")
-	const body = document.querySelector("body")
-	sidePanel.classList.remove("active")
-	// body.style.overflow = 'visible'
+  if (e.target.classList.contains("nav")) return
+  const sidePanel = document.querySelector("#side-panel")
+  const body = document.querySelector("body")
+  sidePanel.classList.remove("active")
+  // body.style.overflow = 'visible'
 }
 
 //FIXME
@@ -707,142 +709,115 @@ function disableSidePanel(e) {
 const screenWidth = screen.width
 let touchStart
 document.addEventListener("touchstart", (e) => {
-	touchStart = e.touches[0].clientX
+  touchStart = e.touches[0].clientX
 })
 
 let touchEnd
 document.addEventListener("touchmove", (e) => {
-	touchEnd = e.touches[0].clientX
-	handleMove(touchStart, touchEnd, screenWidth)
+  touchEnd = e.touches[0].clientX
+  handleMove(touchStart, touchEnd, screenWidth)
 })
 
 function handleMove(touchstart, touchEnd, screenWidth) {
-	const delta = touchEnd - touchstart
+  const delta = touchEnd - touchstart
 
-	//If more than x% of the screen was swiped, trigger
-	if (delta / screenWidth > 0.3) {
-		const sidePanel = document.querySelector("#side-panel")
+  //If more than x% of the screen was swiped, trigger
+  if (delta / screenWidth > 0.3) {
+    const sidePanel = document.querySelector("#side-panel")
 
-		document.removeEventListener("click", disableSidePanel)
-		sidePanel.classList.add("active")
-		document.addEventListener("click", disableSidePanel)
-	}
+    document.removeEventListener("click", disableSidePanel)
+    sidePanel.classList.add("active")
+    document.addEventListener("click", disableSidePanel)
+  }
 }
 
 //Generate stats at the end of a session based on all drinks
 function endSession() {
-	//Create an array comprised of each small drink name and the associated standards
-	const sessionStats = drinks.map((drink) => {
-		const shortName = drinkSizeMapping.find(
-			(mapping) => mapping.name == drink.volume
-		).shortName
+  //Create an array comprised of each small drink name and the associated standards
+  const sessionStats = drinks.map((drink) => {
+    const shortName = drinkSizeMapping.find(
+      (mapping) => mapping.name == drink.volume
+    ).shortName
 
-		return {
-			volume: drink.volume,
-			standards: parseFloat(drink.standards),
-			name: shortName
-		}
-	})
+    return {
+      volume: drink.volume,
+      standards: parseFloat(drink.standards),
+      name: shortName,
+    }
+  })
 
-	//Genuinely no idea how this works
-	//Research the reduce method more
-	const standardsPerDrinkName = Array.from(
-		sessionStats.reduce(
-			(m, { name, standards }) => m.set(name, (m.get(name) || 0) + standards),
-			new Map()
-		),
-		([name, standards]) => ({ name, standards })
-	)
+  //Genuinely no idea how this works
+  //Research the reduce method more
+  const standardsPerDrinkName = Array.from(
+    sessionStats.reduce(
+      (m, { name, standards }) => m.set(name, (m.get(name) || 0) + standards),
+      new Map()
+    ),
+    ([name, standards]) => ({ name, standards })
+  )
 
-	//Create an array of the start time of all drinks
-	const drinkStartTimes = drinks.map((drink) => drink.logDatetime)
+  //Create an array of the start time of all drinks
+  const drinkStartTimes = drinks.map((drink) => drink.logDatetime)
 
-	//Grab the start and end of the session
-	sessionStartTime = drinkStartTimes.reduce((a, b) => Math.min(a, b))
-	sessionEndTime = drinkStartTimes.reduce((a, b) => Math.max(a, b))
+  //Grab the start and end of the session
+  sessionStartTime = drinkStartTimes.reduce((a, b) => Math.min(a, b))
+  sessionEndTime = drinkStartTimes.reduce((a, b) => Math.max(a, b))
 
-	//Get overall session standards
-	const standardsInSession = standardsInSystem().standardsInSystem
+  //Get overall session standards
+  const standardsInSession = standardsInSystem().standardsInSystem
 
-	//Grab the elements needed
-	const standardsContainer = document.querySelector(".session-standards")
-	const sessionStandards = standardsContainer.querySelector(
-		"#session-standards-total"
-	)
-	const sessionTimes = document.querySelector("#session-times")
+  //Grab the elements needed
+  const standardsContainer = document.querySelector(".session-standards")
+  const sessionStandards = standardsContainer.querySelector(
+    "#session-standards-total"
+  )
+  const sessionTimes = document.querySelector("#session-times")
 
-	const pintsContainer = document.querySelector(".pints-container")
-	const pintsValue = pintsContainer.querySelector(".pints-number")
-	const schoonersContainer = document.querySelector(".schooners-container")
-	const schoonersValue = schoonersContainer.querySelector(".schooners-number")
-	const cansContainer = document.querySelector(".cans-container")
-	const cansValue = cansContainer.querySelector(".cans-number")
-	const shotsContainer = document.querySelector(".shots-container")
-	const shotsValue = shotsContainer.querySelector(".shots-number")
+  const pintsContainer = document.querySelector(".pints-container")
+  const pintsValue = pintsContainer.querySelector(".pints-number")
+  const schoonersContainer = document.querySelector(".schooners-container")
+  const schoonersValue = schoonersContainer.querySelector(".schooners-number")
+  const cansContainer = document.querySelector(".cans-container")
+  const cansValue = cansContainer.querySelector(".cans-number")
+  const shotsContainer = document.querySelector(".shots-container")
+  const shotsValue = shotsContainer.querySelector(".shots-number")
 
-	standardsPerDrinkName.forEach((drink) => {
-		if (drink.name == "pint") {
-			pintsContainer.style.display = "flex"
-			pintsValue.innerText = `Pints: ${drink.standards}x standards`
-		} else if (drink.name == "schooner") {
-			schoonersContainer.style.display = "flex"
-			schoonersValue.innerText = `Schooners: ${drink.standards}x standards`
-		} else if (drink.name == "can") {
-			cansContainer.style.display = "flex"
-			cansValue.innerText = `Cans: ${drink.standards}x standards`
-		} else if (drink.name == "shot") {
-			shotsContainer.style.display = "flex"
-			shotsValue.innerText = `Shots: ${drink.standards}x standards`
-		}
-	})
+  standardsPerDrinkName.forEach((drink) => {
+    if (drink.name == "pint") {
+      pintsContainer.style.display = "flex"
+      pintsValue.innerText = `Pints: ${drink.standards}x standards`
+    } else if (drink.name == "schooner") {
+      schoonersContainer.style.display = "flex"
+      schoonersValue.innerText = `Schooners: ${drink.standards}x standards`
+    } else if (drink.name == "can") {
+      cansContainer.style.display = "flex"
+      cansValue.innerText = `Cans: ${drink.standards}x standards`
+    } else if (drink.name == "shot") {
+      shotsContainer.style.display = "flex"
+      shotsValue.innerText = `Shots: ${drink.standards}x standards`
+    }
+  })
 
-	sessionStandards.innerText = `${standardsInSession}x \nStandards`
+  sessionStandards.innerText = `${standardsInSession}x \nStandards`
 
-	sessionTimes.innerText = `between ${timeConverter(
-		sessionStartTime
-	)} and ${timeConverter(sessionEndTime)}`
+  sessionTimes.innerText = `between ${timeConverter(
+    sessionStartTime
+  )} and ${timeConverter(sessionEndTime)}`
 
-	return standardsPerDrinkName
+  return standardsPerDrinkName
 }
 
 function archiveDrinks(drinks) {
-	if (drinks.length == 0) return
-	//Create a session ID
-	sessionID = new Date().getTime()
+  if (drinks.length == 0) return
 
-	//Set each drink's archived status to true
-	//And the sessionID to sessionID
-	drinks.forEach((drink) => {
-		drink.archived = true
-		drink.sessionID = sessionID
-	})
-
-	//Create a new archived drink object
-	const archivedDrinks = {
-		sessionID: sessionID,
-		drinks: drinks
-	}
-
-	//Load archived drinks array from storage
-	const sessionArchiveString = localStorage.getItem(SESSION_ARCHIVE)
-	const sessionArchive = JSON.parse(sessionArchiveString) || []
-
-	sessionArchive.push(archivedDrinks)
-
-	localStorage.setItem(SESSION_ARCHIVE, JSON.stringify(sessionArchive))
-
-	drinks.length = 0
-	const container = document.querySelector("#container")
-	container.innerHTML = ""
-	saveDrinks()
-
-	// saveDrinks()
-	// renderData()
+  drinks.length = 0
+  updateData()
+  renderData()
 }
 
 document.addEventListener("click", (e) => {
-	if (!e.target.matches("#archive-drinks")) return
-	archiveDrinks(drinks)
+  if (!e.target.matches("#archive-drinks")) return
+  archiveDrinks(drinks)
 })
 
 console.log(drinks)
