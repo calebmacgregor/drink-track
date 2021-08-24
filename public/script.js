@@ -525,7 +525,7 @@ function renderDrink(drink) {
 
 	//Remove the 'delete' button from the element if it has been marked as drunk
 	if (drinkContainer.classList.contains("drunk")) {
-		progressBar.value = drink.percentBurned < 0.02 ? 0.02 : drink.percentBurned
+		progressBar.value = drink.percentBurned < 0.02 ? 0 : drink.percentBurned
 		drinkContainer.classList.contains("drunk") ? deleteButton.remove() : ""
 		drinkButton.remove()
 	} else {
